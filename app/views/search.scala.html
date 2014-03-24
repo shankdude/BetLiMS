@@ -1,4 +1,4 @@
-@(books: List[Book])
+@(books: List[DatabaseTables.Book])
 
 @headtemplate("stylesheet.css") {
    <img src="/home/s2/Documents/html data/logo.jpg">
@@ -25,7 +25,7 @@ Search Query: <input type="text" name="user">
     </thead>
     
     <tbody>
-    @for (book <- books) {
+    @for(book <- books) {
       <tr>
 	<td> @book.title </td>
 	<td> @book.author </td>
