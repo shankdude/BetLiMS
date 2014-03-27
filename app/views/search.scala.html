@@ -1,17 +1,14 @@
-@(books: List[DatabaseTables.Book])
+@(form : Form[String])(books: Option[List[DatabaseTables.Book]])
 
 @headtemplate("stylesheet.css") {
    <img src="/home/s2/Documents/html data/logo.jpg">
   <h1>Welcome to IIT Patna Library</h1>
   <h2>Please Enter the Search query</h2>
-  <form>
-    
-    <form name="input" action="html_form_action.asp" method="get">
-Search Query: <input type="text" name="user">
-<input type="submit" value="Submit">
-</form> 
-    
-  </form>
+  
+  @helper.form(action = routes.Application.index()) {
+    @helper.inputText(form("title"))
+    <button type="submit" name="search">Search</button>
+  }
   <table border="4px" align="center" topmargin="10px">
     <thead>
     <tr>
@@ -25,12 +22,17 @@ Search Query: <input type="text" name="user">
     </thead>
     
     <tbody>
-    @for(book <- books) {
-      <tr>
-	<td> @book.title </td>
-	<td> @book.author </td>
-	<td> @book.copies </td>
-	</tr>  
+    @books match {
+      case Some(b) => { 
+	@for(book <- b) {
+	  <tr>
+	    <td> @book.title </td>
+	    <td> @book.author </td>
+	    <td> @book.copies </td>
+	    </tr>  
+	  }
+	}
+      case None => {}
      }
     </tbody>
   </table>
