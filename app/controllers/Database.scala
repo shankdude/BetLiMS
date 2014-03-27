@@ -8,10 +8,6 @@ import scala.slick.driver.H2Driver.simple._
 object Database {
   import DatabaseTables._
   
-  def init {
-    
-  }
-  
   val books = TableQuery[Book]
 }
 
