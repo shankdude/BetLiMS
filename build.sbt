@@ -15,6 +15,6 @@ libraryDependencies ++= Seq(
 playScalaSettings
 
 templatesImport ++= Seq( 
-  "controllers.Forms._",
-  "controllers.DatabaseTables._"
+  "controllers.FormEncapsulators._",
+  "controllers.Models._"
 )

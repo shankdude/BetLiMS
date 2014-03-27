@@ -10,6 +10,8 @@ import play.api.data._
 import play.api.data.Forms._
 
 object Forms {
+  
+  import FormEncapsulators._;
 
   val searchForm: Form[BookSearch] = Form {
     mapping(
@@ -21,6 +23,10 @@ object Forms {
       (bSearch: BookSearch) => bSearch.isDefined
     )
   }
+  
+}
+
+object FormEncapsulators {
   
   case class BookSearch(isbn: Option[String], title: Option[String], author: Option[String]) {
     def isDefined = isbn.isDefined || title.isDefined || author.isDefined
