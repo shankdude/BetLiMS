@@ -12,6 +12,9 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-nop" % "1.6.4"
 )
 
-templatesImport += "controllers.DatabaseTables._"
+playScalaSettings
 
-play.Project.playScalaSettings
+templatesImport ++= Seq( 
+  "controllers.FormEncapsulators._",
+  "controllers.Models._"
+)

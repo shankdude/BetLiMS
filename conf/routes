@@ -6,7 +6,7 @@
 GET     /                           controllers.Application.index
 
 #Search pages
-#GET     /search                     controllers.Application.search(title: Option[String])
+GET     /search                     controllers.Application.search(isbn: Option[String], title: Option[String], author: Option[String])
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
