@@ -6,9 +6,9 @@
   <h1>Welcome to IIT Patna Library</h1>
   <h2>Please Enter the Search query</h2>
   
-  @helper.form(action = routes.Application.index()) {
+  @helper.form(action = routes.BetLiMSApplication.searchPost()) {
     @helper.inputText(form("title"))
-    <button type="submit" name="search">Search</button>
+    <button type="submit">Search</button>
   }
   <table border="4px" align="center" topmargin="10px">
     <thead>
@@ -25,14 +25,14 @@
     <tbody>
     @books match {
       case Some(b) => { 
-	@for(book <- b) {
-	  <tr>
-	    <td> @book.title </td>
-	    <td> @book.author </td>
-	    <td> @book.copies </td>
-	    </tr>  
-	  }
-	}
+        @for(book <- b) {
+          <tr>
+            <td> @book.title </td>
+            <td> @book.author </td>
+            <td> @book.copies </td>
+          </tr>  
+        }
+      }
       case None => {}
      }
     </tbody>
