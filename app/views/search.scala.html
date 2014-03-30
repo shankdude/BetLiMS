@@ -8,6 +8,8 @@
   
   @helper.form(action = routes.BetLiMSApplication.searchPost()) {
     @helper.inputText(form("title"))
+    @helper.inputText(form("isbn"))
+    @helper.inputText(form("author"))
     <button type="submit">Search</button>
   }
   <table border="4px" align="center" topmargin="10px">
