@@ -18,3 +18,5 @@ templatesImport ++= Seq(
   "controllers.FormEncapsulators._",
   "controllers.Models._"
 )
+
+routesImport += "controllers.Binders._"

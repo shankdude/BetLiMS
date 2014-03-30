@@ -3,10 +3,11 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET     /                           controllers.BetLiMSApplication.index
 
 #Search pages
-GET     /search                     controllers.Application.search(isbn: Option[String], title: Option[String], author: Option[String])
+GET     /search                     controllers.BetLiMSApplication.search(bs: controllers.FormEncapsulators.BookSearch)
+GET     /search                     controllers.BetLiMSApplication.searchPost()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
