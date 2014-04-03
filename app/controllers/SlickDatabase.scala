@@ -1,19 +1,14 @@
-
 package controllers
 
-import javax.sql.DataSource
-import play.api.db.DB
+import play.api.db.slick.DB
 import play.api.Application
-import scala.slick.driver.JdbcProfile
+import play.api.db.slick.Config.driver.simple._
+import scala.slick.lifted.Tag
 
 trait SlickDatabaseTables {
-  
-  val profile: JdbcProfile
-  
-  import scala.slick.driver.H2Driver.simple._
-  //import profile.simple._
+
   import Models._
-  
+
   val booksTableName = "books"
   val books = TableQuery[BookTable]
   class BookTable(tag: Tag) extends Table[Book](tag, booksTableName) {
@@ -21,25 +16,23 @@ trait SlickDatabaseTables {
     def title = column[String]("title")
     def author = column[String]("author")
     def copies = column[Int]("copies")
-    
+
     def * = (isbn, title, author, copies) <> (Book.tupled, Book.unapply)
   }
-  
+
 }
 
-trait SlickDatabaseUtil extends DatabaseUtil {
+trait SlickDatabaseService extends DatabaseService {
   tables: SlickDatabaseTables =>
-  
-  def dataSource: DataSource
-  
-  import scala.slick.driver.H2Driver.simple._
-  //import profile.simple._
+
   import Models._
   import FormEncapsulators._
-  
+
+  implicit val application: Application
+
   override def booksearch(q: BookSearch): List[Book] = {
-    inDatabase { implicit session =>
-      val v0 = books
+    DB withSession { implicit session =>
+      val v0 = tables.books
 
       val v1 = q.isbn match {
         case Some(x) => v0.filter(y => y.isbn.like("%" + x + "%"))
@@ -53,49 +46,26 @@ trait SlickDatabaseUtil extends DatabaseUtil {
         case Some(x) => v2.filter(y => y.author.like("%" + x + "%"))
         case None => v2
       }
-  
+
       v3.list
     }
   }
-  
-  override def init() {
-    /*inDatabase { implicit session =>
-      import scala.slick.jdbc.meta._
-      
-      if (MTable.getTables(booksTableName).list().isEmpty) {
-        books.ddl.create
-      }
-    }*/
-  }
 
-  def inDatabase[R](f: (Session) => R): R = {
-    Database.forDataSource(dataSource) withSession {
-      session => f(session)
+  override def init() {
+    DB withSession { implicit session =>
+      import scala.slick.jdbc.meta._
+
+      if (MTable.getTables(tables.booksTableName).list().isEmpty) {
+        tables.books.ddl.create
+      }
     }
   }
 }
 
 object SlickDatabaseUtil {
-  val SLICK_DRIVER = "db.%s.slickdriver"
-  val DEFAULT_SLICK_DRIVER = "scala.slick.driver.H2Driver"
-  
-  def getDBUtil(name: String = "default")(implicit app: Application): DatabaseUtil = {
-    val driverClass = app.configuration.getString(SLICK_DRIVER.format(name)).
-      getOrElse(DEFAULT_SLICK_DRIVER)
-    val driver = singleton[JdbcProfile](driverClass)
-    new SlickDatabaseUtil with SlickDatabaseTables {
-      override val profile = driver
-      override def dataSource = DB.getDataSource(name)
-    }
-  }
-  
-  private def singleton[T](name: String)(implicit man: Manifest[T]): T = {
-    import scala.reflect.runtime.{ currentMirror => cm }
-    import scala.reflect.runtime.universe._
-    
-    val moduleSymbol = cm.moduleSymbol(Class.forName(name))
-    val moduleMirror = cm.reflectModule(moduleSymbol)
-    
-    moduleMirror.instance.asInstanceOf[T]
+  def getDBUtil(name: String = "default")(implicit app: Application): DatabaseService = {
+    new {
+      val application = app
+    } with SlickDatabaseTables with SlickDatabaseService
   }
 }

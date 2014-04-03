@@ -10,13 +10,17 @@ object Models {
   case class Book(isbn: String, title: String, author: String, copies: Int)
 }
 
-trait DatabaseUtil {
-  
+trait DatabaseService {
+
   import Models._
-  
+
   init()
-  
+
   def booksearch(q: BookSearch): List[Book]
-  
+
   def init(): Unit
+}
+
+trait DatabaseServiceProvider {
+  def databaseService: DatabaseService
 }
