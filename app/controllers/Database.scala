@@ -11,12 +11,16 @@ object Models {
 }
 
 trait DatabaseService {
-  
+
   import Models._
-  
+
   init()
-  
+
   def booksearch(q: BookSearch): List[Book]
-  
+
   def init(): Unit
+}
+
+trait DatabaseServiceProvider {
+  def databaseService: DatabaseService
 }
