@@ -1,16 +1,28 @@
 
 @(form : Form[BookSearch])(books: Option[List[Book]])
 
-@headtemplate("stylesheet.css") {
-   <img src="/home/s2/Documents/html data/logo.jpg">
-  <h1>Welcome to IIT Patna Library</h1>
-  <h2>Please Enter the Search query</h2>
+@main("stylesheet.css") {
+   
+  <div id="new_item_header">
+  <h1>Please Enter the Search query</h1>
+  </div>
+  
+  <div id="form-text">
   
   @helper.form(action = routes.BetLiMSApplication.searchPost()) {
     @helper.inputText(form("title"))
-    <button type="submit">Search</button>
+    <br>
+    <button id="btn" type="submit">Search</button>
   }
-  <table border="4px" align="center" topmargin="10px">
+  </div>
+  
+  
+    @books match {
+      case Some(b) => { 
+      
+        @for(book <- b) {
+        <div id="tbl">
+    <table border="4px" align="center" topmargin="10px">
     <thead>
     <tr>
       <th colspan="3">Search Results</th>
@@ -23,18 +35,18 @@
     </thead>
     
     <tbody>
-    @books match {
-      case Some(b) => { 
-        @for(book <- b) {
           <tr>
             <td> @book.title </td>
             <td> @book.author </td>
             <td> @book.copies </td>
-          </tr>  
+          </tr> 
+      </tbody>
+  </table>
+  </div>
         }
+     
       }
       case None => {}
      }
-    </tbody>
-  </table>
+    
 }

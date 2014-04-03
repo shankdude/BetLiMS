@@ -24,6 +24,8 @@ a:hover {
 @font-face {
 	font-family: 'Elsie';
 	src: url('../fonts/Elsie-Regular.ttf');
+}
+@font-face {
 	font-family: 'Gilda Display';
 	src: url('../fonts/GildaDisplay-Regular.ttf');
 	
@@ -213,6 +215,132 @@ p {
 }
 
 
+/*copied*/
+
+nav #login {
+  border-right: 1px solid #ddd;
+  box-shadow: 1px 0 0 #fff;  
+}
+
+nav #login-trigger,
+nav #signup a {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  height: 25px;
+  line-height: 25px;
+  font-weight: bold;
+  padding: 0 8px;
+  
+  text-shadow: 0 1px 0 #fff;
+  color: #85859c;
+}
+
+nav #signup a {
+  border-radius: 0 3px 3px 0;
+}
+
+nav #login-trigger {
+  border-radius: 3px 0 0 3px;
+  color: #fff;
+  text-align: center;
+	font-size: 18px;
+  text-decoration: none;
+}
+
+nav #login-trigger:hover,
+nav #login .active,
+nav #signup a:hover {
+  background: #fff;
+  color: #69699c;
+}
+
+nav #login-content {
+  display: none;
+  position: absolute;
+  top: 24px;
+  right: 0;
+  z-index: 999;    
+  background: #fff;
+  background-image: linear-gradient(top, #fff, #eee);  
+  padding: 15px;
+  box-shadow: 0 2px 2px -1px rgba(0,0,0,.9);
+  border-radius: 3px 0 3px 3px;
+}
+
+nav li #login-content {
+  right: 0;
+  width: 250px;  
+}
+
+/*--------------------*/
+
+#inputs input {
+  background: #f1f1f1;
+  padding: 6px 5px;
+  margin: 0 0 5px 0;
+  width: 238px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px #ccc inset;
+}
+
+#inputs input:focus {
+  background-color: #fff;
+  border-color: #e8c291;
+  outline: none;
+  box-shadow: 0 0 0 1px #e8c291 inset;
+}
+
+/*--------------------*/
+
+#login #actions {
+  margin: 10px 0 0 0;
+}
+
+#login #submit {    
+  background-color: #d14545;
+  background-image: linear-gradient(top, #e97171, #d14545);
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  text-shadow: 0 1px 0 rgba(0,0,0,.5);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;    
+  border: 1px solid #7e1515;
+  float: left;
+  height: 30px;
+  padding: 0;
+  width: 100px;
+  cursor: pointer;
+  font: bold 14px Arial, Helvetica;
+  color: #fff;
+}
+
+#login #submit:hover,
+#login #submit:focus {    
+  background-color: #e97171;
+  background-image: linear-gradient(top, #d14545, #e97171);
+} 
+
+#login #submit:active {   
+  outline: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;   
+}
+
+#login #submit::-moz-focus-inner {
+  border: none;
+}
+
+#login label {
+  float: right;
+  line-height: 30px;
+}
+
+#login label input {
+  position: relative;
+  top: 2px;
+  right: 2px;
+}
 
 
 /* Main Content Area */
@@ -258,17 +386,19 @@ p {
 }
 
 #new_item_image {
-	width: 60%;
+	width: 72.5%;
 	float: right;
 	overflow: hidden;
-	text-align: right;
-	padding-top:20px;
+	text-align: center;
+	padding-top:28%;
+	background:#666666 url('../images/head2.jpg') no-repeat ;
+	height: 100%;
 }
 
 #new_item_text {
 	float: left;
 	clear: left;
-	width: 348px;
+	width: 18.5%;
 	font-size: 20px;
 	line-height: 30px;
 }
@@ -291,7 +421,7 @@ p {
 #right-content{
 	margin-left: 19.8%;
 	width: 79.2%;
-	background:#666666 url(images/head2.jpg) no-repeat left;
+	background:#666666 url('../images/head2.jpg') no-repeat left;
 	height: 625px;
 }
 
@@ -317,37 +447,23 @@ p {
 	color: #9595c2;
 }
 
-#product_brands {
+
+#tbl	{
+	width: 10%;
+	margin-left: 40%;
+	align: center;
+	height: 30%
+}
+#form-text
+{
+	padding:10px;
+	margin-bottom: 30%;
+	
 }
 
-#product_brands ul {
-	width: 470px;
-	list-style-type: none;
-}
-
-#product_brands li {
-	margin: 5px 6px 3px 3px;
-	height: 40px;
-	list-style-type: none;
-}
-
-#product_brands li.zalcom {
-	width: 107px;
-	background: url('images/brand_zalcom.gif') no-repeat 0px 0px;
-}
-
-#product_brands li.digital {
-	width: 95px;
-	background: url('images/brand_digital.gif') no-repeat 0px 0px;
-}
-
-#product_brands li.adept {
-	width: 126px;
-	background: url('images/brand_adept.gif') no-repeat 0px 0px;
-}
-
-#product_brands li.simtel {
-	width: 99px;
-	background: url('images/brand_simtel.gif') no-repeat 0px 0px;
+#btn {
+	font-weight: bold;
+	font-size:18px;
+	
 }
 

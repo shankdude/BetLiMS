@@ -5,10 +5,80 @@
 <html>
     <head>
         <title>@title</title>
-        <link rel="stylesheet" href='@routes.Assets.at("homestyle.css")' type="text/css" >
-        
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/homestyle.css")' type="text/css" >
+        <script src='@routes.Assets.at("javascripts/jquery.js")' type="text/javascript"></script>
+        <script>
+	    $(document).ready(function(){
+	    $('#login-trigger').click(function(){
+	    $(this).next('#login-content').slideToggle();
+	    $(this).toggleClass('active');          
+    
+	  if ($(this).hasClass('active')) $(this).find('span').html('&#x25B2;')
+	    else $(this).find('span').html('&#x25BC;')
+	})
+	  });
+
+        </script>
     </head>
     <body>
+      <div id="container">
+       <div id="page_menu">
+	 
+	 <ul>
+	 <li>
+	   <a href="#">Home</a>
+	 </li>
+	 <li>
+	   <a href="#">About us</a>
+	 </li>
+	 <li>
+	   <a href="#">Search</a>
+	 </li>
+	 <li>
+	   <a href="#">Personal</a>
+	 </li>
+	 
+	   <nav> 
+	    <ul> 
+	      <li id="login"> 
+	      <a id="login-trigger" href="#"> Log in 
+		<span>▼</span> </a> 
+	      <div id="login-content"> 
+		  <form> 
+		  <fieldset id="inputs"> 
+		  <input id="username" type="email" name="Email" placeholder="Your email address" required> 
+		  <input id="password" type="password" name="Password" placeholder="Password" required> 
+		  </fieldset> 
+		  <fieldset id="actions"> 
+		    <input type="submit" id="submit" value="Log in"> 
+		    <label>
+		    <input type="checkbox" checked="checked"> Keep me signed in</label> 
+		  </fieldset> 
+		  </form> 
+	      </div> 
+	      </li> 
+	    </ul> 
+	   </nav>
+	 
+	  </ul>
+	</div>
+     <!-- Start of Page Header -->
+     
+     <div id="page_header">
+       
+       <div id="page_heading">
+	 <h1>
+	 </h1>
+       
+       <h2>
+	 <a>Welcome to IIT PATNA Library</a>
+       </h2>
+       
+     </div>
+     
+     <div class="clearthis">&nbsp;</div>
+     
+   </div>
+   
         @content
-    </body>
 </html>
