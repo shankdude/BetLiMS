@@ -28,7 +28,8 @@ trait SlickDatabaseService extends DatabaseService {
   import Models._
   import FormEncapsulators._
 
-  implicit val application: Application
+  val application: Application
+  val name: String
 
   def insertBooks(b: Seq[Book]) {
     DB withSession { implicit session => 
@@ -69,9 +70,10 @@ trait SlickDatabaseService extends DatabaseService {
 }
 
 object SlickDatabaseUtil {
-  def getDBUtil(name: String = "default")(implicit app: Application): DatabaseService = {
+  def getDBUtil(_name: String = "default")(implicit app: Application): DatabaseService = {
     new {
       val application = app
+      val name = _name
     } with SlickDatabaseTables with SlickDatabaseService
   }
 }
