@@ -30,6 +30,12 @@ trait SlickDatabaseService extends DatabaseService {
 
   implicit val application: Application
 
+  def insertBooks(b: Seq[Book]) {
+    DB withSession { implicit session => 
+      tables.books ++= b
+    }
+  }
+
   override def booksearch(q: BookSearch): List[Book] = {
     DB withSession { implicit session =>
       val v0 = tables.books
