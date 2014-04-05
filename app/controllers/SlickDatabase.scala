@@ -73,7 +73,7 @@ object SlickDatabaseUtil {
   def getDBUtil(_name: String = "default")(implicit app: Application): DatabaseService = {
     new {
       val application = app
-      val name = _name
+      override val name = _name
     } with SlickDatabaseTables with SlickDatabaseService
   }
 }
