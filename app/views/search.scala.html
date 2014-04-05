@@ -1,16 +1,18 @@
 
 @(form : Form[BookSearch])(books: Option[List[Book]])
 
-@main("stylesheet.css") {
+@main("Search") {
    
   <div id="new_item_header">
   <h1>Please Enter the Search query</h1>
   </div>
   
   <div id="form-text">
-  
-  @helper.form(action = routes.BetLiMSApplication.searchPost()) {
-    @helper.inputText(form("title"))
+  <br>
+  @helper.form(action = routes.BetLiMSApplication.searchPost(),'id -> "txt") {
+    @helper.inputText(form("Title"), 'id -> "lbl")<br>
+    @helper.inputText(form("ISBN"), 'id -> "lbl")<br>
+    @helper.inputText(form("Author"), 'id -> "lbl")<br>
     <br>
     <button id="btn" type="submit">Search</button>
   }
