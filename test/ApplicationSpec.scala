@@ -1,30 +1,97 @@
-import org.specs2.mutable._
-import org.specs2.runner._
-import org.junit.runner._
+package test
+
+import org.specs2.mutable.Specification
 
 import play.api.test._
 import play.api.test.Helpers._
 
-/**
- * Add your spec here.
- * You can mock out a whole application including requests, plugins etc.
- * For more information, consult the wiki.
- */
-@RunWith(classOf[JUnitRunner])
-class ApplicationSpec extends Specification {
+import controllers.BetLiMSApplication
+import controllers.FormEncapsulators._
+import controllers.Models._
 
-  "Application" should {
+class ApplicationSpec extends BetLiMSSpec {
 
-    "send 404 on a bad request" in new WithApplication{
-      route(FakeRequest(GET, "/boum")) must beNone
+  "BetLiMS Application" should {
+
+    "send status 404 for url" >> {
+      "/boun" in new WithApplication {
+        route(FakeRequest(GET, "/boum")) must beNone
+      }
+
+      "/index" in new WithApplication {
+        route(FakeRequest(GET, "/index")) must beNone
+      }
+
+      "/search?book=" in new WithApplication {
+        route(FakeRequest(GET, "/search?book=")) must beNone
+      } 
     }
 
-    "render the index page" in new WithApplication{
-      val home = route(FakeRequest(GET, "/")).get
+    "render the index page for GET url /" in withMockDatabase { (db, app) =>
+      val result = app.index()(FakeRequest(GET, "/"))
 
-      status(home) must equalTo(OK)
-      contentType(home) must beSome.which(_ == "text/html")
-      contentAsString(home) must contain ("Your new application is ready.")
+      "status must be OK" >> {
+        status(result) must equalTo(OK)
+      }
+      "content type must be text/html" >> {
+        contentType(result) must beSome.which(_ == "text/html")
+      }
+      "content must contain \"Your new application is ready.\"" >> {
+        contentAsString(result) must contain ("Your new application is ready.")
+      }
+    }
+
+    "render the search page for GET url /search" in withMockDatabase { (db, app) =>
+      db.booksearch(any[BookSearch]) returns List[Book]()
+      val result = app.search(BookSearch(None, None, None))(FakeRequest(GET, "/search"))
+
+      "status must be OK" >> {
+        status(result) must equalTo(OK)
+      }
+      "content type must be text/html" >> {
+        contentType(result) must beSome.which(_ == "text/html")
+      }
+      "content must contain \"Please Enter the Search query\"" >> {
+        contentAsString(result) must contain ("Please Enter the Search query")
+      }
+      "content must not contain \"Search Results\"" >> {
+        contentAsString(result) must not contain ("Search Results")
+      }
+    }
+
+    "render the search page for GET url /search?title=Ashu" in withMockDatabase { (db, app) =>
+      db.booksearch(any[BookSearch]) returns List[Book] (
+        Book("12345", "Intro 1", "Ashu", 4),
+        Book("12356", "Intro 2", "Ashutosh", 1)
+      )
+
+      val result = app.search(BookSearch(Some("Ashu"), None, None))(
+         FakeRequest(GET, "/search?title=Ashu")
+      )
+
+      "status must be OK" >> {
+        status(result) must equalTo(OK)
+      }
+      "content type must be text/html" >> {
+        contentType(result) must beSome.which(_ == "text/html")
+      }
+      "content must contain \"Please Enter the Search query\"" >> {
+        contentAsString(result) must contain ("Please Enter the Search query")
+      }
+      "content must contain \"Search Results\"" >> {
+        contentAsString(result) must contain ("Search Results")
+      }
+    }
+
+    "cater to the form submission" >> {
+      "searchPost" in withMockDatabase { (db, app) =>
+        val url = "/search?title=Ashu"
+
+        val result = app.searchPost().apply(FakeRequest("GET", url))
+
+        status(result) must be equalTo(SEE_OTHER)
+        redirectLocation(result) must be equalTo(Some(url))
+      }
     }
   }
 }

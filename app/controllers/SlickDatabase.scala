@@ -29,9 +29,16 @@ trait SlickDatabaseService extends DatabaseService {
   import FormEncapsulators._
 
   implicit val application: Application
+  val name: String = "default"
+
+  def insertBooks(b: Seq[Book]) {
+    DB withSession { implicit session => 
+      tables.books ++= b
+    }
+  }
 
   override def booksearch(q: BookSearch): List[Book] = {
-    DB withSession { implicit session =>
+    DB(name) withSession { implicit session =>
       val v0 = tables.books
 
       val v1 = q.isbn match {
@@ -52,7 +59,7 @@ trait SlickDatabaseService extends DatabaseService {
   }
 
   override def init() {
-    DB withSession { implicit session =>
+    DB(name) withSession { implicit session =>
       import scala.slick.jdbc.meta._
 
       if (MTable.getTables(tables.booksTableName).list().isEmpty) {
@@ -63,9 +70,10 @@ trait SlickDatabaseService extends DatabaseService {
 }
 
 object SlickDatabaseUtil {
-  def getDBUtil(name: String = "default")(implicit app: Application): DatabaseService = {
+  def getDBUtil(_name: String = "default")(implicit app: Application): DatabaseService = {
     new {
       val application = app
+      override val name = _name
     } with SlickDatabaseTables with SlickDatabaseService
   }
 }
