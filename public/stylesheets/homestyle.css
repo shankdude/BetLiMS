@@ -5,7 +5,7 @@
 
 body {
 	height: 100%;
-	background-color: #5f564d;
+	background-color: #831618;
 	color: #80776e;
 	font-family: 'Elsie', cursive;
 	font-size: 10px;
@@ -52,9 +52,6 @@ p {
 
 #container {
 	width: 100%;
-	border-color: #9e9ec3;
-	border-width: 0px 1px 1px;
-	border-style: solid;
 	background-color:#f0f0d8;
 }
 
@@ -70,15 +67,15 @@ p {
 /* Page Header */
 
 #page_header {
-	width: 99%;
+	width: 100%;
 	height: 205px;
 	color: #fff;
 	overflow: hidden;
-	background: #CD0911 ;
+	background: #110902 ;
 }
 
 #page_header a {
-	color: #fff;
+	color: #ED1C24;
 	text-decoration: none;
 }
 
@@ -91,7 +88,7 @@ p {
 	width: 20%;
 	height: 205px;
 	padding-top:50px;
-	background:#CD0911  ;
+	background:#110902  ;
 	float: left;
 }
 
@@ -100,7 +97,7 @@ p {
 	width: 80%;
 	height: 205px;
 	padding-top:70px;
-	background:#AB1011 ;
+	background:#011023 ;
 	font-size: 30px;
 	text-align: center;
 }
@@ -175,7 +172,6 @@ p {
 /* Main Navigation Menu */
 
 #page_menu {
-	margin-bottom: 1px;
 	width: 100%;
 	height: 30px;
 }
@@ -188,14 +184,14 @@ p {
 }
 
 #page_menu li {
-	width: 19.9%;
+	width: 20%;
 	height: 30px;
 	float: left;
-	background: url('../images/menu_background.gif') 0px 0px;
 	overflow: hidden;
 	text-align: center;
 	font-size: 18px;
 	font-weight: bold;
+	background: #222930;
 }
 
 #page_menu li.last {
@@ -203,23 +199,27 @@ p {
 	width: 130px;
 }
 
-#page_menu a {
-	padding-top: 3px;
-	display: block;
-	color: #fff;
-	text-decoration: none;
+#page_menu a {display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  height: 25px;
+  background-color:#4EB1BA; 
+	padding:6px 11px; 
+	letter-spacing:-1px; 
+	font: bold 0.89em'CartoGothicStdBook',  Arial, Helvetica, sans-serif; 
+	text-transform: uppercase; 
+	color: #fff; -moz-border-radius: 7px;  -webkit-border-radius: 7px;   border-radius: 7px;
 }
 
 #page_menu a:hover {
-	color:#CC3300;
+	color: #55A4AE;
 }
 
 
 /*copied*/
 
 nav #login {
-  border-right: 1px solid #ddd;
-  box-shadow: 1px 0 0 #fff;  
+  background: #222930;
 }
 
 nav #login-trigger,
@@ -228,20 +228,19 @@ nav #signup a {
   *display: inline;
   *zoom: 1;
   height: 25px;
-  line-height: 25px;
-  font-weight: bold;
-  padding: 0 8px;
+  background-color:#4EB1BA; 
+	padding:6px 11px; 
+	letter-spacing:-1px; 
+	font: bold 0.89em'CartoGothicStdBook',  Arial, Helvetica, sans-serif; 
+	text-transform: uppercase; 
+	color: #fff; -moz-border-radius: 7px;  -webkit-border-radius: 7px;   border-radius: 7px;
   
-  text-shadow: 0 1px 0 #fff;
-  color: #85859c;
 }
 
 nav #signup a {
-  border-radius: 0 3px 3px 0;
 }
 
 nav #login-trigger {
-  border-radius: 3px 0 0 3px;
   color: #fff;
   text-align: center;
 	font-size: 18px;
@@ -251,8 +250,7 @@ nav #login-trigger {
 nav #login-trigger:hover,
 nav #login .active,
 nav #signup a:hover {
-  background: #fff;
-  color: #69699c;
+  background:#F6F3EC;
 }
 
 nav #login-content {
@@ -260,12 +258,7 @@ nav #login-content {
   position: absolute;
   top: 24px;
   right: 0;
-  z-index: 999;    
-  background: #fff;
-  background-image: linear-gradient(top, #fff, #eee);  
-  padding: 15px;
-  box-shadow: 0 2px 2px -1px rgba(0,0,0,.9);
-  border-radius: 3px 0 3px 3px;
+  z-index: 999;
 }
 
 nav li #login-content {
@@ -348,13 +341,14 @@ nav li #login-content {
 #main_content {
 	margin-right: 2px;
 	width: 100%;
-	text-align: center;	
+	text-align: center;
+	background: #831618;
 }
 
 #main_content .h_divider {
 	margin-bottom: 2px;
 	height: 1px;
-	background-color: #c2c2cd;
+	background: #831618;
 	overflow: hidden;
 }
 
@@ -365,20 +359,22 @@ nav li #login-content {
 	margin: 0px auto 2px;
 	padding: 5px 10px;
 	float: left;
+	background: #831618;
 }
 
 #new_item_header {
 	margin-top: 10px;
+	
 }
 
 #new_item_header h1 {
-	color: #434367;
+	color: #e1e1e1;
 	font-size: 30px;
-	font-weight: normal;
+	font-weight: underline;
 }
 
 #new_item_header h2 {
-	color: #434367;
+	color: #ED1C24;
 	font-size: 20px;
 	font-weight: bold;
 	font-family: 'Gilda Display', serif;
@@ -386,13 +382,14 @@ nav li #login-content {
 }
 
 #new_item_image {
-	width: 72.5%;
+	width: 77.5%;
 	float: right;
 	overflow: hidden;
 	text-align: center;
 	padding-top:28%;
 	background:#666666 url('../images/head2.jpg') no-repeat ;
 	height: 100%;
+	margin-right: 10px;
 }
 
 #new_item_text {
@@ -401,6 +398,9 @@ nav li #login-content {
 	width: 18.5%;
 	font-size: 20px;
 	line-height: 30px;
+	color: #fff;
+	align: center;
+	margin-left: 10px;
 }
 
 #new_item_link {
