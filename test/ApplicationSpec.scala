@@ -11,48 +11,87 @@ import controllers.Models._
 
 class ApplicationSpec extends BetLiMSSpec {
 
-  "Application" should {
-
-    "send 404 on a bad request" in new WithApplication {
-      route(FakeRequest(GET, "/boum")) must beNone
-      route(FakeRequest(GET, "/index")) must beNone
-      //route(FakeRequest(GET, "/search?book=")) must beNone
-    }
-
-    "render the index page for GET url /" in new WithApplication {
-      val result = route(FakeRequest(GET, "/")).get
-
-      status(result) must equalTo(OK)
-      contentType(result) must beSome.which(_ == "text/html")
-      contentAsString(result) must contain ("Your new application is ready.")
-    }
-
-    "render the search page for GET url /search" in new WithApplication {
-      val result = route(FakeRequest(GET, "/search")).get
-
-      status(result) must equalTo(OK)
-      contentType(result) must beSome.which(_ == "text/html")
-      contentAsString(result) must contain ("Please Enter the Search query")
-      //contentAsString(result) must not contain("Search Results")
-    }
-  }
-
   "BetLiMS Application" should {
 
-    "cater to the search GET request" in withMockDatabase { db =>
-      db.booksearch(any[BookSearch]) returns List[Book](
-        Book("12356", "Intro 2", "Ashutosh", 1),
-        Book("13356", "Intro 3", "XYZtosh", 1)
+    "send status 404 for url" >> {
+      "/boun" in new WithApplication {
+        route(FakeRequest(GET, "/boum")) must beNone
+      }
+
+      "/index" in new WithApplication {
+        route(FakeRequest(GET, "/index")) must beNone
+      }
+
+      "/search?book=" in new WithApplication {
+        route(FakeRequest(GET, "/search?book=")) must beNone
+      } 
+    }
+
+    "render the index page for GET url /" in withMockDatabase { (db, app) =>
+      val result = app.index()(FakeRequest(GET, "/"))
+
+      "status must be OK" >> {
+        status(result) must equalTo(OK)
+      }
+      "content type must be text/html" >> {
+        contentType(result) must beSome.which(_ == "text/html")
+      }
+      "content must contain \"Your new application is ready.\"" >> {
+        contentAsString(result) must contain ("Your new application is ready.")
+      }
+    }
+
+    "render the search page for GET url /search" in withMockDatabase { (db, app) =>
+      db.booksearch(any[BookSearch]) returns List[Book]()
+      val result = app.search(BookSearch(None, None, None))(FakeRequest(GET, "/search"))
+
+      "status must be OK" >> {
+        status(result) must equalTo(OK)
+      }
+      "content type must be text/html" >> {
+        contentType(result) must beSome.which(_ == "text/html")
+      }
+      "content must contain \"Please Enter the Search query\"" >> {
+        contentAsString(result) must contain ("Please Enter the Search query")
+      }
+      "content must not contain \"Search Results\"" >> {
+        contentAsString(result) must not contain ("Search Results")
+      }
+    }
+
+    "render the search page for GET url /search?title=Ashu" in withMockDatabase { (db, app) =>
+      db.booksearch(any[BookSearch]) returns List[Book] (
+        Book("12345", "Intro 1", "Ashu", 4),
+        Book("12356", "Intro 2", "Ashutosh", 1)
       )
 
-      val app = mock[BetLiMSApplication]
-      app.databaseService returns db
+      val result = app.search(BookSearch(Some("Ashu"), None, None))(
+         FakeRequest(GET, "/search?title=Ashu")
+      )
 
-      val request = FakeRequest("GET", "/search?title=Ashu")
-      val result = app.searchPost().apply(request)
+      "status must be OK" >> {
+        status(result) must equalTo(OK)
+      }
+      "content type must be text/html" >> {
+        contentType(result) must beSome.which(_ == "text/html")
+      }
+      "content must contain \"Please Enter the Search query\"" >> {
+        contentAsString(result) must contain ("Please Enter the Search query")
+      }
+      "content must contain \"Search Results\"" >> {
+        contentAsString(result) must contain ("Search Results")
+      }
+    }
 
-      val bodyText = contentAsString(result)
-      bodyText must be equalTo "ok"
+    "cater to the form submission" >> {
+      "searchPost" in withMockDatabase { (db, app) =>
+        val url = "/search?title=Ashu"
+
+        val result = app.searchPost().apply(FakeRequest("GET", url))
+
+        status(result) must be equalTo(SEE_OTHER)
+        redirectLocation(result) must be equalTo(Some(url))
+      }
     }
   }
 }
