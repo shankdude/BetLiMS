@@ -10,9 +10,9 @@
   <div id="form-text">
   <br>
   @helper.form(action = routes.BetLiMSApplication.searchPost(),'id -> "txt") {
-    @helper.inputText(form("Title"), 'id -> "lbl")<br>
-    @helper.inputText(form("ISBN"), 'id -> "lbl")<br>
-    @helper.inputText(form("Author"), 'id -> "lbl")<br>
+    @helper.inputText(form("title"), 'id -> "lbl")<br>
+    @helper.inputText(form("isbn"), 'id -> "lbl")<br>
+    @helper.inputText(form("author"), 'id -> "lbl")<br>
     <br>
     <button id="btn" type="submit">Search</button>
   }
