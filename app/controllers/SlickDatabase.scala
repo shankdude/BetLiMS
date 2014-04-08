@@ -20,7 +20,7 @@ trait SlickDatabaseTables {
     def * = (isbn, title, author, copies) <> (Book.tupled, Book.unapply)
   }
 
-  val studentsTableName = "books"
+  val studentsTableName = "student_user"
   val students = TableQuery[StudentTable]
   class StudentTable(tag: Tag) extends Table[StudentUser](tag, studentsTableName) {
     def userid = column[String]("user_id", O.PrimaryKey)
@@ -30,15 +30,25 @@ trait SlickDatabaseTables {
 
     def * = (userid, name, year, branch) <> (StudentUser.tupled, StudentUser.unapply)
   }
+  
+  val adminsTableName = "admin_user"
+  val admins = TableQuery[AdminTable]
+  class AdminTable(tag: Tag) extends Table[AdminUser](tag, adminsTableName) {
+    def userid = column[String]("user_id", O.PrimaryKey)
+    def name = column[String]("name")
+    
+    def * = (userid, name) <> (AdminUser.tupled, AdminUser.unapply)
+  }
 
-  val studentsAuthTableName = "user_auth"
-  val studentsAuth = TableQuery[StudentAuthTable]
-  class StudentAuthTable(tag: Tag) extends Table[String](tag, studentsAuthTableName) {
+  val usersAuthTableName = "user_auth"
+  val usersAuth = TableQuery[UserAuthTable]
+  class UserAuthTable(tag: Tag) extends Table[(String, String)](tag, usersAuthTableName) {
     def userid = column[String]("user_id", O.PrimaryKey)
     def password = column[String]("pass")
     def student = foreignKey("student_user", userid, students)(_.userid)
+    def admin = foreignKey("admin_user", userid, admins)(_.userid)
 
-    def * = userid
+    def * = (userid, password)
   }
 }
 
@@ -81,11 +91,17 @@ trait SlickDatabaseService extends DatabaseService {
   override def authenticateUser(q: UserLogin): Option[User] = {
     DB(name) withSession { implicit session =>
       //Since userid is unique
-      val sAuth = studentsAuth.where(_.userid is q.username).list.head
-
-      if (sAuth.password == q.password) Some(sAuth.student)
-      else None
+      val a = for {
+        uAuth <- usersAuth where (_.userid is q.username) if (matchPasswords(uAuth.password, q.password))
+        admin <- uAuth.admin
+        student <- uAuth.student
+      } yield (uAuth, admin, student)
+      None
     }
+  }
+  
+  private def matchPasswords(passCorrect: Rep[String], passRequest: Rep[String]) = {
+    passCorrect == passRequest
   }
 
   override def init() {

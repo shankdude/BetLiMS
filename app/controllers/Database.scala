@@ -9,7 +9,8 @@ import FormEncapsulators._;
 object Models {
   case class Book(isbn: String, title: String, author: String, copies: Int)
   sealed abstract class User(val userid: String)
-  case class StudentUser(userid: String, name: String, year: Int, branch: String) extends User(userid)
+  case class StudentUser(override val userid: String, name: String, year: Int, branch: String) extends User(userid)
+  case class AdminUser(override val userid: String, name: String) extends User(userid)
 }
 
 trait DatabaseService {
