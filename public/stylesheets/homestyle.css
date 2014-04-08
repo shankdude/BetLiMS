@@ -5,7 +5,7 @@
 
 body {
 	height: 100%;
-	background-color: #5f564d;
+	background-color: #831618;
 	color: #80776e;
 	font-family: 'Elsie', cursive;
 	font-size: 10px;
@@ -24,6 +24,8 @@ a:hover {
 @font-face {
 	font-family: 'Elsie';
 	src: url('../fonts/Elsie-Regular.ttf');
+}
+@font-face {
 	font-family: 'Gilda Display';
 	src: url('../fonts/GildaDisplay-Regular.ttf');
 	
@@ -50,9 +52,6 @@ p {
 
 #container {
 	width: 100%;
-	border-color: #9e9ec3;
-	border-width: 0px 1px 1px;
-	border-style: solid;
 	background-color:#f0f0d8;
 }
 
@@ -68,15 +67,15 @@ p {
 /* Page Header */
 
 #page_header {
-	width: 99%;
+	width: 100%;
 	height: 205px;
 	color: #fff;
 	overflow: hidden;
-	background: #CD0911 ;
+	background: #110902 ;
 }
 
 #page_header a {
-	color: #fff;
+	color: #ED1C24;
 	text-decoration: none;
 }
 
@@ -89,7 +88,7 @@ p {
 	width: 20%;
 	height: 205px;
 	padding-top:50px;
-	background:#CD0911  ;
+	background:#110902  ;
 	float: left;
 }
 
@@ -98,7 +97,7 @@ p {
 	width: 80%;
 	height: 205px;
 	padding-top:70px;
-	background:#AB1011 ;
+	background:#011023 ;
 	font-size: 30px;
 	text-align: center;
 }
@@ -173,7 +172,6 @@ p {
 /* Main Navigation Menu */
 
 #page_menu {
-	margin-bottom: 1px;
 	width: 100%;
 	height: 30px;
 }
@@ -186,14 +184,14 @@ p {
 }
 
 #page_menu li {
-	width: 19.9%;
+	width: 20%;
 	height: 30px;
 	float: left;
-	background: url('../images/menu_background.gif') 0px 0px;
 	overflow: hidden;
 	text-align: center;
 	font-size: 18px;
 	font-weight: bold;
+	background: #222930;
 }
 
 #page_menu li.last {
@@ -201,18 +199,141 @@ p {
 	width: 130px;
 }
 
-#page_menu a {
-	padding-top: 3px;
-	display: block;
-	color: #fff;
-	text-decoration: none;
+#page_menu a {display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  height: 25px;
+  background-color:#4EB1BA; 
+	padding:6px 11px; 
+	letter-spacing:-1px; 
+	font: bold 0.89em'CartoGothicStdBook',  Arial, Helvetica, sans-serif; 
+	text-transform: uppercase; 
+	color: #fff; -moz-border-radius: 7px;  -webkit-border-radius: 7px;   border-radius: 7px;
 }
 
 #page_menu a:hover {
-	color:#CC3300;
+	color: #55A4AE;
 }
 
 
+/*copied*/
+
+nav #login {
+  background: #222930;
+}
+
+nav #login-trigger,
+nav #signup a {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  height: 25px;
+  background-color:#4EB1BA; 
+	padding:6px 11px; 
+	letter-spacing:-1px; 
+	font: bold 0.89em'CartoGothicStdBook',  Arial, Helvetica, sans-serif; 
+	text-transform: uppercase; 
+	color: #fff; -moz-border-radius: 7px;  -webkit-border-radius: 7px;   border-radius: 7px;
+  
+}
+
+nav #signup a {
+}
+
+nav #login-trigger {
+  color: #fff;
+  text-align: center;
+	font-size: 18px;
+  text-decoration: none;
+}
+
+nav #login-trigger:hover,
+nav #login .active,
+nav #signup a:hover {
+  background:#F6F3EC;
+}
+
+nav #login-content {
+  display: none;
+  position: absolute;
+  top: 24px;
+  right: 0;
+  z-index: 999;
+}
+
+nav li #login-content {
+  right: 0;
+  width: 250px;  
+}
+
+/*--------------------*/
+
+#inputs input {
+  background: #f1f1f1;
+  padding: 6px 5px;
+  margin: 0 0 5px 0;
+  width: 238px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px #ccc inset;
+}
+
+#inputs input:focus {
+  background-color: #fff;
+  border-color: #e8c291;
+  outline: none;
+  box-shadow: 0 0 0 1px #e8c291 inset;
+}
+
+/*--------------------*/
+
+#login #actions {
+  margin: 10px 0 0 0;
+}
+
+#login #submit {    
+  background-color: #d14545;
+  background-image: linear-gradient(top, #e97171, #d14545);
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  text-shadow: 0 1px 0 rgba(0,0,0,.5);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;    
+  border: 1px solid #7e1515;
+  float: left;
+  height: 30px;
+  padding: 0;
+  width: 100px;
+  cursor: pointer;
+  font: bold 14px Arial, Helvetica;
+  color: #fff;
+}
+
+#login #submit:hover,
+#login #submit:focus {    
+  background-color: #e97171;
+  background-image: linear-gradient(top, #d14545, #e97171);
+} 
+
+#login #submit:active {   
+  outline: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;   
+}
+
+#login #submit::-moz-focus-inner {
+  border: none;
+}
+
+#login label {
+  float: right;
+  line-height: 30px;
+}
+
+#login label input {
+  position: relative;
+  top: 2px;
+  right: 2px;
+}
 
 
 /* Main Content Area */
@@ -220,13 +341,14 @@ p {
 #main_content {
 	margin-right: 2px;
 	width: 100%;
-	text-align: center;	
+	text-align: center;
+	background: #831618;
 }
 
 #main_content .h_divider {
 	margin-bottom: 2px;
 	height: 1px;
-	background-color: #c2c2cd;
+	background: #831618;
 	overflow: hidden;
 }
 
@@ -237,20 +359,22 @@ p {
 	margin: 0px auto 2px;
 	padding: 5px 10px;
 	float: left;
+	background: #831618;
 }
 
 #new_item_header {
 	margin-top: 10px;
+	
 }
 
 #new_item_header h1 {
-	color: #434367;
+	color: #e1e1e1;
 	font-size: 30px;
-	font-weight: normal;
+	font-weight: underline;
 }
 
 #new_item_header h2 {
-	color: #434367;
+	color: #ED1C24;
 	font-size: 20px;
 	font-weight: bold;
 	font-family: 'Gilda Display', serif;
@@ -258,19 +382,25 @@ p {
 }
 
 #new_item_image {
-	width: 60%;
+	width: 77.5%;
 	float: right;
 	overflow: hidden;
-	text-align: right;
-	padding-top:20px;
+	text-align: center;
+	padding-top:28%;
+	background:#666666 url('../images/head2.jpg') no-repeat ;
+	height: 100%;
+	margin-right: 10px;
 }
 
 #new_item_text {
 	float: left;
 	clear: left;
-	width: 348px;
+	width: 18.5%;
 	font-size: 20px;
 	line-height: 30px;
+	color: #fff;
+	align: center;
+	margin-left: 10px;
 }
 
 #new_item_link {
@@ -291,7 +421,7 @@ p {
 #right-content{
 	margin-left: 19.8%;
 	width: 79.2%;
-	background:#666666 url(images/head2.jpg) no-repeat left;
+	background:#666666 url('../images/head2.jpg') no-repeat left;
 	height: 625px;
 }
 
@@ -317,37 +447,27 @@ p {
 	color: #9595c2;
 }
 
-#product_brands {
+
+#tbl	{
+	width: 10%;
+	margin-left: 40%;
+	align: center;
+	height: 30%
+}
+#form-text
+{
+	padding:10px;
+	margin-bottom: 30%;
+	
 }
 
-#product_brands ul {
-	width: 470px;
-	list-style-type: none;
+#btn {
+	font-weight: bold;
+	font-size:18px;
+	
 }
 
-#product_brands li {
-	margin: 5px 6px 3px 3px;
-	height: 40px;
-	list-style-type: none;
+#txt  {
+	font-weight: bold;
+	font-size: 16px;
 }
-
-#product_brands li.zalcom {
-	width: 107px;
-	background: url('images/brand_zalcom.gif') no-repeat 0px 0px;
-}
-
-#product_brands li.digital {
-	width: 95px;
-	background: url('images/brand_digital.gif') no-repeat 0px 0px;
-}
-
-#product_brands li.adept {
-	width: 126px;
-	background: url('images/brand_adept.gif') no-repeat 0px 0px;
-}
-
-#product_brands li.simtel {
-	width: 99px;
-	background: url('images/brand_simtel.gif') no-repeat 0px 0px;
-}
-
