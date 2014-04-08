@@ -20,6 +20,26 @@ trait SlickDatabaseTables {
     def * = (isbn, title, author, copies) <> (Book.tupled, Book.unapply)
   }
 
+  val studentsTableName = "books"
+  val students = TableQuery[StudentTable]
+  class StudentTable(tag: Tag) extends Table[StudentUser](tag, studentsTableName) {
+    def userid = column[String]("user_id", O.PrimaryKey)
+    def name = column[String]("name")
+    def branch = column[String]("branch")
+    def year = column[Int]("year")
+
+    def * = (userid, name, year, branch) <> (StudentUser.tupled, StudentUser.unapply)
+  }
+
+  val studentsAuthTableName = "user_auth"
+  val studentsAuth = TableQuery[StudentAuthTable]
+  class StudentAuthTable(tag: Tag) extends Table[String](tag, studentsAuthTableName) {
+    def userid = column[String]("user_id", O.PrimaryKey)
+    def password = column[String]("pass")
+    def student = foreignKey("student_user", userid, students)(_.userid)
+
+    def * = userid
+  }
 }
 
 trait SlickDatabaseService extends DatabaseService {
@@ -55,6 +75,16 @@ trait SlickDatabaseService extends DatabaseService {
       }
 
       v3.list
+    }
+  }
+
+  override def authenticateUser(q: UserLogin): Option[User] = {
+    DB(name) withSession { implicit session =>
+      //Since userid is unique
+      val sAuth = studentsAuth.where(_.userid is q.username).list.head
+
+      if (sAuth.password == q.password) Some(sAuth.student)
+      else None
     }
   }
 
