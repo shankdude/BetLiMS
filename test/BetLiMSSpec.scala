@@ -1,7 +1,12 @@
 package test
 
+import org.specs2.execute.AsResult
+import org.specs2.execute.Result
+import org.specs2.execute.Results
 import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
+import org.specs2.specification.AllExpectations
+import org.specs2.specification.ResultsContext
 
 import play.api.GlobalSettings
 import play.api.test._
@@ -10,7 +15,7 @@ import play.api.test.Helpers._
 import controllers._
 import controllers.SlickDatabaseUtil._
 
-abstract class BetLiMSSpec extends Specification with Mockito {
+abstract class BetLiMSSpec extends Specification with AllExpectations with Mockito {
 
   type SlickInjectedDatabase = SlickDatabaseService with SlickDatabaseTables
 
@@ -28,7 +33,7 @@ abstract class BetLiMSSpec extends Specification with Mockito {
       def databaseService = db
     }
     val fakeApp = FakeApplication(withGlobal = Some(new GlobalSettings() {
-      override def  getControllerInstance[A](controllerClass: Class[A]): A = {
+      override def getControllerInstance[A](controllerClass: Class[A]): A = {
         app.asInstanceOf[A]
       }
     }))
