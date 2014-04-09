@@ -22,31 +22,19 @@
         </script>
     </head>
     <body>
-      <div id="container">
-       <div id="page_menu">
-	 
-	 <ul>
-	 <li>
-	   <a href="./">Home</a>
-	 </li>
-	 <li>
-	   <a href="#">About us</a>
-	 </li>
-	 <li>
-	   <a href="./search">Search</a>
-	 </li>
-	 <li>
-	   <a href="#">Personal</a>
-	 </li>
-	  
-	      <li id="login"> 
-	      <a id="login-trigger" href="#" 
-	> Log in 
+    <div id='cssmenu'>
+<ul id = "list">
+   <li class='active'><a href=/><span>Home</span></a></li>
+   <li><a href='#'><span>About us</span></a></li>
+   <li><a href=/search><span>Search</span></a></li>
+   <li><a href='#'><span>Personal</span></a></li></ul></div>
+    <div id="login"> 
+	      <a id="login-trigger" href="#" > Log in 
 		<span></span> </a> 
 	      <div id="login-content"> 
 		  <form> 
 		  <fieldset id="inputs"> 
-		  <input id="username" type="email" name="Email" placeholder="Your email address" required> 
+		  <input id="username" type="email" name="Email" placeholder="Your email address" required> <br>
 		  <input id="password" type="password" name="Password" placeholder="Password" required> 
 		  </fieldset> 
 		  <fieldset id="actions"> 
@@ -55,11 +43,9 @@
 		    <input type="checkbox" checked="checked"> Keep me signed in</label> 
 		  </fieldset> 
 		  </form> 
-	      </div> 
-	      </li> 
-	 
-	  </ul>
-	</div>
+	      </div> </div>
+</div>
+     
      <!-- Start of Page Header -->
      
      <div id="page_header">
@@ -76,7 +62,7 @@
      
      
    </div>
-   </div>
+   
    
         @content
 </html>
