@@ -40,12 +40,22 @@ trait SlickDatabaseTables {
     def * = (userid, name) <> (AdminUser.tupled, AdminUser.unapply)
   }
 
-  val usersAuthTableName = "user_auth"
-  val usersAuth = TableQuery[UserAuthTable]
-  class UserAuthTable(tag: Tag) extends Table[(String, String)](tag, usersAuthTableName) {
+  val studentUsersAuthTableName = "student_user_auth"
+  val studentUsersAuth = TableQuery[StudentUserAuthTable]
+  class StudentUserAuthTable(tag: Tag) extends Table[(String, String)](tag, studentUsersAuthTableName) {
     def userid = column[String]("user_id", O.PrimaryKey)
     def password = column[String]("pass")
     def student = foreignKey("student_user", userid, students)(_.userid)
+
+    def * = (userid, password)
+  }
+
+
+  val adminUsersAuthTableName = "admin_user_auth"
+  val adminUsersAuth = TableQuery[AdminUserAuthTable]
+  class AdminUserAuthTable(tag: Tag) extends Table[(String, String)](tag, adminUsersAuthTableName) {
+    def userid = column[String]("user_id", O.PrimaryKey)
+    def password = column[String]("pass")
     def admin = foreignKey("admin_user", userid, admins)(_.userid)
 
     def * = (userid, password)
@@ -91,10 +101,13 @@ trait SlickDatabaseService extends DatabaseService {
   def insertUser(u: Seq[(User, String)]) {
     DB(name) withSession { implicit session =>
       for ((user, pass) <- u) {
-        tables.usersAuth += (user.userid, encryptPassword(pass))
         user match {
-          case s: StudentUser => tables.students += s
-          case a: AdminUser   => tables.admins += a
+          case s: StudentUser => 
+            tables.students += s
+            tables.studentUsersAuth += (user.userid, encryptPassword(pass))
+          case a: AdminUser   => 
+            tables.admins += a
+            tables.adminUsersAuth += (user.userid, encryptPassword(pass))
         }
       }
     }
@@ -103,12 +116,17 @@ trait SlickDatabaseService extends DatabaseService {
   override def authenticateUser(q: UserLogin): Option[User] = {
     DB(name) withSession { implicit session =>
       //Since userid is unique
+      val s = for {
+        sAuth <- studentUsersAuth where (_.userid is q.username) if (matchPasswords(sAuth.password, q.password))
+        student <- sAuth.student
+      } yield (sAuth, student)
+      println("joke1")
+      println(s)
       val a = for {
-        uAuth <- usersAuth where (_.userid is q.username) if (matchPasswords(uAuth.password, q.password))
-        admin <- uAuth.admin
-        student <- uAuth.student
-      } yield (uAuth, admin, student)
-      println("joke")
+        aAuth <- adminUsersAuth where (_.userid is q.username) if (matchPasswords(aAuth.password, q.password))
+        admin <- aAuth.admin
+      } yield (aAuth, admin)
+      println("joke2")
       println(a)
 
       None
@@ -136,8 +154,11 @@ trait SlickDatabaseService extends DatabaseService {
       if (MTable.getTables(tables.adminsTableName).list().isEmpty) {
         tables.admins.ddl.create
       }
-      if (MTable.getTables(tables.usersAuthTableName).list().isEmpty) {
-        tables.usersAuth.ddl.create
+      if (MTable.getTables(tables.adminUsersAuthTableName).list().isEmpty) {
+        tables.adminUsersAuth.ddl.create
+      }
+      if (MTable.getTables(tables.studentUsersAuthTableName).list().isEmpty) {
+        tables.studentUsersAuth.ddl.create
       }
     }
   }
