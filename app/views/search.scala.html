@@ -1,7 +1,7 @@
 
-@(form : Form[BookSearch])(books: Option[List[Book]])
+@(form : Form[BookSearch] ,form2 : Form[UserLogin])(books: Option[List[Book]])
 
-@main("Search") {
+@main("Search", form2) {
    
   <div id="new_item_header">
   <h1>Please Enter the Search query</h1>
@@ -9,7 +9,7 @@
   
   <div id="form-text">
   <br>
-  @helper.form(action = routes.BetLiMSApplication.searchPost(),'id -> "txt") {
+    @helper.form(action = routes.BetLiMSApplication.searchPost(),'id -> "txt") {
     @helper.inputText(form("title"), 'id -> "lbl")<br>
     @helper.inputText(form("isbn"), 'id -> "lbl")<br>
     @helper.inputText(form("author"), 'id -> "lbl")<br>
