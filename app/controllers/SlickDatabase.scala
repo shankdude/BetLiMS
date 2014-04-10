@@ -30,13 +30,13 @@ trait SlickDatabaseTables {
 
     def * = (userid, name, year, branch) <> (StudentUser.tupled, StudentUser.unapply)
   }
-  
+
   val adminsTableName = "admin_user"
   val admins = TableQuery[AdminTable]
   class AdminTable(tag: Tag) extends Table[AdminUser](tag, adminsTableName) {
     def userid = column[String]("user_id", O.PrimaryKey)
     def name = column[String]("name")
-    
+
     def * = (userid, name) <> (AdminUser.tupled, AdminUser.unapply)
   }
 
@@ -62,7 +62,7 @@ trait SlickDatabaseService extends DatabaseService {
   val name: String = "default"
 
   def insertBooks(b: Seq[Book]) {
-    DB withSession { implicit session => 
+    DB withSession { implicit session =>
       tables.books ++= b
     }
   }
@@ -73,18 +73,30 @@ trait SlickDatabaseService extends DatabaseService {
 
       val v1 = q.isbn match {
         case Some(x) => v0.filter(y => y.isbn.like("%" + x + "%"))
-        case None => v0
+        case None    => v0
       }
       val v2 = q.title match {
         case Some(x) => v1.filter(y => y.title.like("%" + x + "%"))
-        case None => v1
+        case None    => v1
       }
       val v3 = q.author match {
         case Some(x) => v2.filter(y => y.author.like("%" + x + "%"))
-        case None => v2
+        case None    => v2
       }
 
       v3.list
+    }
+  }
+
+  def insertUser(u: Seq[(User, String)]) {
+    DB(name) withSession { implicit session =>
+      for ((user, pass) <- u) {
+        tables.usersAuth += (user.userid, encryptPassword(pass))
+        user match {
+          case s: StudentUser => tables.students += s
+          case a: AdminUser   => tables.admins += a
+        }
+      }
     }
   }
 
@@ -96,12 +108,19 @@ trait SlickDatabaseService extends DatabaseService {
         admin <- uAuth.admin
         student <- uAuth.student
       } yield (uAuth, admin, student)
+      println("joke")
+      println(a)
+
       None
     }
   }
-  
+
   private def matchPasswords(passCorrect: Rep[String], passRequest: Rep[String]) = {
     passCorrect == passRequest
+  }
+
+  private def encryptPassword(pass: String) = {
+    pass
   }
 
   override def init() {
@@ -110,6 +129,15 @@ trait SlickDatabaseService extends DatabaseService {
 
       if (MTable.getTables(tables.booksTableName).list().isEmpty) {
         tables.books.ddl.create
+      }
+      if (MTable.getTables(tables.studentsTableName).list().isEmpty) {
+        tables.students.ddl.create
+      }
+      if (MTable.getTables(tables.adminsTableName).list().isEmpty) {
+        tables.admins.ddl.create
+      }
+      if (MTable.getTables(tables.usersAuthTableName).list().isEmpty) {
+        tables.usersAuth.ddl.create
       }
     }
   }
