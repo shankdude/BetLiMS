@@ -17,7 +17,12 @@ class IntegrationSpec extends Specification {
 
       browser.goTo("http://localhost:" + port)
 
-      browser.pageSource must contain("Your new application is ready.")
+      browser.pageSource must contain ("""|
+            |The library is opened between 9.00 AM to 8.30 PM, in weekdays. 
+            |On Sundays it opens at 9.00 AM and closes at 5.00 PM. 
+            |Any body can issue/return books at any time using the self check in 
+            |and check out system. The Central Library provides a healthy and peaceful 
+            |environment for users to acquire modern knowledge.""".stripMargin.replace("\n", ""))
     }
   }
 }
