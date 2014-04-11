@@ -116,25 +116,28 @@ trait SlickDatabaseService extends DatabaseService {
   override def authenticateUser(q: UserLogin): Option[User] = {
     DB(name) withSession { implicit session =>
       //Since userid is unique
-      val s = for {
-        sAuth <- studentUsersAuth where (_.userid is q.username) if (matchPasswords(sAuth.password, q.password))
+      val s = (for {
+        sAuth <- studentUsersAuth filter (_.userid === q.username) if (matchPasswords(sAuth.password, q.password))
         student <- sAuth.student
-      } yield (sAuth, student)
-      println("joke1")
-      println(s)
-      val a = for {
-        aAuth <- adminUsersAuth where (_.userid is q.username) if (matchPasswords(aAuth.password, q.password))
+      } yield student).list.headOption
+//      val resS = s.list.headOption
+//      println(s)
+//      println("This is the student result - " + s.list)
+      val a = (for {
+        aAuth <- adminUsersAuth filter (_.userid === q.username) if (matchPasswords(aAuth.password, q.password))
         admin <- aAuth.admin
-      } yield (aAuth, admin)
-      println("joke2")
-      println(a)
-
-      None
+      } yield admin).list.headOption
+//      val resA = a.list.headOption
+//      println(a)
+//      println("This is the admin result - " + a.list)
+      
+      a.orElse(s)
+//      None
     }
   }
 
-  private def matchPasswords(passCorrect: Rep[String], passRequest: Rep[String]) = {
-    passCorrect == passRequest
+  private def matchPasswords(passCorrect: Column[String], passRequest: String) = {
+    passCorrect === passRequest
   }
 
   private def encryptPassword(pass: String) = {
