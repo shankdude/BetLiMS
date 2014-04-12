@@ -113,26 +113,25 @@ trait SlickDatabaseService extends DatabaseService {
     }
   }
 
-  override def authenticateUser(q: UserLogin): Option[User] = {
+  override def authenticateAdminUser(q: UserLogin): Option[AdminUser] = {
     DB(name) withSession { implicit session =>
-      //Since userid is unique
-      val s = (for {
-        sAuth <- studentUsersAuth filter (_.userid === q.username) if (matchPasswords(sAuth.password, q.password))
-        student <- sAuth.student
-      } yield student).list.headOption
-//      val resS = s.list.headOption
-//      println(s)
-//      println("This is the student result - " + s.list)
-      val a = (for {
+      val a = for {
         aAuth <- adminUsersAuth filter (_.userid === q.username) if (matchPasswords(aAuth.password, q.password))
         admin <- aAuth.admin
-      } yield admin).list.headOption
-//      val resA = a.list.headOption
-//      println(a)
-//      println("This is the admin result - " + a.list)
-      
-      a.orElse(s)
-//      None
+      } yield admin
+      //Since userid is unique
+      a.list.headOption
+    }
+  }
+  
+  override def authenticateStudentUser(q: UserLogin): Option[StudentUser] = {
+    DB(name) withSession { implicit session =>
+      val s = for {
+        sAuth <- studentUsersAuth filter (_.userid === q.username) if (matchPasswords(sAuth.password, q.password))
+        student <- sAuth.student
+      } yield student
+      //Since userid is unique
+      s.list.headOption
     }
   }
 

@@ -21,7 +21,9 @@ trait DatabaseService {
 
   def booksearch(q: BookSearch): List[Book]
 
-  def authenticateUser(q: UserLogin): Option[User]
+  def authenticateStudentUser(q: UserLogin): Option[StudentUser]
+  
+  def authenticateAdminUser(q: UserLogin): Option[AdminUser]
 
   def init(): Unit
 }
