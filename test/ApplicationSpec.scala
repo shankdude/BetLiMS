@@ -19,7 +19,14 @@ class ApplicationSpec extends BetLiMSSpec {
     "send status 404 for url" >> {
       test404(GET, "/boun")
       test404(GET, "/index")
-      test404(GET, "/search?book=")
+    }
+    
+    "send Bad Request for url" >> {
+      "/search?book=" in new WithApplication {
+        val res = route(FakeRequest(GET, "/search?book="))
+        res must beSome
+        status(res.get) must be equalTo(BAD_REQUEST)
+      }
     }
 
     "render the index page for GET url /" in withMockDatabase { (db, app) =>
