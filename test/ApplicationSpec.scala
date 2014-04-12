@@ -18,7 +18,7 @@ class ApplicationSpec extends BetLiMSSpec {
 
     "send status 404 for url" >> {
       test404(GET, "/boun")
-      test404(GET, "/search")
+      test404(GET, "/index")
       test404(GET, "/search?book=")
     }
 
@@ -27,12 +27,12 @@ class ApplicationSpec extends BetLiMSSpec {
 
       testStatus(result)
       testContentType(result)
-      testContentContains(result, """
-            The library is opened between 9.00 AM to 8.30 PM, in weekdays. 
-            On Sundays it opens at 9.00 AM and closes at 5.00 PM. 
-            Any body can issue/return books at any time using the self check in 
-            and check out system. The Central Library provides a healthy and peaceful 
-            environment for users to acquire modern knowledge.""")
+      testContentContains(result, """|
+            |The library is opened between 9.00 AM to 8.30 PM, in weekdays. 
+            |On Sundays it opens at 9.00 AM and closes at 5.00 PM. 
+            |Any body can issue/return books at any time using the self check in 
+            |and check out system. The Central Library provides a healthy and peaceful 
+            |environment for users to acquire modern knowledge.""".stripMargin.replace("\n", ""))
     }
 
     "render the search page for GET url /search" in withMockDatabase { (db, app) =>
@@ -93,7 +93,7 @@ class ApplicationSpec extends BetLiMSSpec {
   
   def testContentContains(result: Future[SimpleResult], check: String, z: Boolean = true) = {
     val msg = if (check.length < 50) check else "some predefined text"
-    "content must contain " + msg >> {
+    "content must " + (if (!z) "not " else "") + "contain " + msg >> {
       if (z) contentAsString(result) must contain(check)
       else contentAsString(result) must not contain(check)
     }
