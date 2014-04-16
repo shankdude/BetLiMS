@@ -15,7 +15,7 @@ import play.api.test.Helpers._
 import controllers._
 import controllers.SlickDatabaseUtil._
 
-abstract class BetLiMSSpec extends Specification with AllExpectations with Mockito {
+abstract class BetLiMSSpec extends Specification with Mockito {
 
   type SlickInjectedDatabase = SlickDatabaseService with SlickDatabaseTables
 

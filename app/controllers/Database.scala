@@ -8,6 +8,9 @@ import FormEncapsulators._;
 
 object Models {
   case class Book(isbn: String, title: String, author: String, copies: Int)
+  sealed abstract class User(val userid: String)
+  case class StudentUser(override val userid: String, name: String, year: Int, branch: String) extends User(userid)
+  case class AdminUser(override val userid: String, name: String) extends User(userid)
 }
 
 trait DatabaseService {
@@ -17,6 +20,10 @@ trait DatabaseService {
   init()
 
   def booksearch(q: BookSearch): List[Book]
+
+  def authenticateStudentUser(q: UserLogin): Option[StudentUser]
+  
+  def authenticateAdminUser(q: UserLogin): Option[AdminUser]
 
   def init(): Unit
 }
