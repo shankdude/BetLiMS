@@ -8,7 +8,7 @@
 
 body {
 	height: 100%;
-	background-color: #831618;
+	background-color: rgb(101, 13, 38);
 	color: #80776e;
 	font-family: 'Elsie', cursive;
 	font-size: 10px;
@@ -187,9 +187,10 @@ p {
 #cssmenu {
   border: 1px solid #000000;
   border-radius: 0px;
-  width: 93%;
+  width: 70%;
   background: #650d26;
 }
+
 #cssmenu ul {
   background: #650d26;
   float: left;
@@ -275,6 +276,7 @@ p {
 	padding: 5px 10px;
 	float: left;
 	background: #5C4837;
+	height:75%;
 }
 /*this*/
 
@@ -430,7 +432,12 @@ p {
 #login-trigger:hover,
 #login .active,
 #signup a:hover {
-  background:#F6F3EC;
+  background:#000000;
+}
+
+#login .active{
+  border-radius: 5px;
+  border: 1px solid #650d26;  
 }
 
 #login-content {
@@ -493,11 +500,14 @@ li #login-content {
 #login #submit:focus {    
   background-color: #e97171;
   /*background-image: linear-gradient(top, #d14545, #e97171);*/
+  border-radius: 5px;
+  border: 1px solid #650d26;  
 } 
 
 #login #submit:active {   
   outline: none;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;   
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset; 
+  
 }
 
 #login #submit::-moz-focus-inner {
@@ -513,4 +523,134 @@ li #login-content {
   position: relative;
   top: 2px;
   right: 2px;
+}
+
+.clear {
+  clear: left;
+}
+
+.container {
+  width: 70%;
+  border-width: 5px; 
+  border-style:dotted solid double;
+  border-color: #9A2345;
+  position: absolute;
+  top: 580px;
+  margin-left: 280px;
+  padding-left:80px;
+  color: #fde;
+}
+
+.left:hover:before, .left:focus:before, .left:active:before {
+    width: 25px;
+    height: 25px;
+}
+
+.left {
+  width: 10%;
+  padding: 10px;
+  padding-left: 30px;
+  border: 1px ;
+  margin-top: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  margin-left: 10px;  
+  display: inline-block;
+    font-size: 18px;
+  float:left;
+}
+/****search result modified*/
+
+div.left {
+    width:80%;
+    text-align: left;
+    color: ;
+    border: 2px dashed #fff;
+    
+   border-top-left-radius: 10px;
+    -moz-border-radius-topleft: 10px;
+    -webkit-border-top-left-radius: 3px;
+    
+    border-bottom-right-radius: 10px;
+    -moz-border-radius-bottomright: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    
+    -webkit-box-shadow: 0 0 0 4px #d39937, 2px 1px 4px 4px rgba(10,10,0,.5);
+    -moz-box-shadow: 0 0 0 4px #d39937, 2px 1px 4px 4px rgba(10,10,0,.5);
+    box-shadow: 0 0 0 4px #d39937, 2px 1px 4px 4px rgba(10,10,0,.5);
+    text-shadow: -1px -1px #666;
+    
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    margin-top: 30px;
+    background-color: rgb(116, 60, 51);
+    background-image: -webkit-gradient(linear, 0 0, 100% 0, color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.5, transparent), to(transparent));
+
+    
+     -webkit-background-size: 50px 50px;
+    -moz-background-size: 50px 50px;
+    background-size: 50px 50px;  /*Controls the size of the stripes */
+}
+
+.left img {
+	padding: 3px;
+	background: #FFF;
+}
+.left .close {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: -15px;
+	left: 385px;
+
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+
+	-webkit-box-shadow: 0 0 0 2px #999, 2px 1px 4px 4px rgba(10,10,0,.5);
+	-moz-box-shadow: 0 0 0 2px #999, 2px 1px 4px 4px rgba(10,10,0,.5);
+	box-shadow: 0 0 0 2px #999, 2px 1px 4px 4px rgba(10,10,0,.5);
+}
+.left p {
+	margin-left: 5px;
+}
+
+.left h2 {
+	padding: 5px;
+	margin: 0;
+	border-bottom: 2px solid #FFF;
+}
+
+.title {
+	float: left;
+	width: 300px;
+	text-align: left;
+	font-weight: bold;
+}
+
+.author {
+	float : right;
+	margin-left: 60px;
+	margin-right: 10px;
+}
+
+.left:hover, .left:focus, .left:active {
+    transform: scale(1.1);
+}
+.left {
+    display: inline-block;
+    transition-duration: 0.3s;
+    transition-property: transform;
+    transform: translateZ(0px);
+    box-shadow: 0px 0px 1px transparent;
+    position: ;
+    top: 590px;
+}
+
+
+#right {
+  float: right;
 }
