@@ -60,6 +60,29 @@ trait SlickDatabaseTables {
 
     def * = (userid, password)
   }
+  
+  val ejournalPublishersTableName = "ejournal_publisher"
+  val ejournalPublishers = TableQuery[EJournalPublisherTable]
+  class EJournalPublisherTable(tag: Tag) extends Table[EJournalPublisher](tag, ejournalPublishersTableName) {
+    def name = column[String]("name")
+    def code = column[String]("code", O.PrimaryKey)
+    def url = column[String]("url")
+    
+    def * = (name, code, url) <> (EJournalPublisher.tupled, EJournalPublisher.unapply)
+  }
+  
+  val ejournalsTableName = "ejournals"
+  val ejournals = TableQuery[EJournalTable]
+  class EJournalTable(tag: Tag) extends Table[EJournal](tag, ejournalsTableName) {
+    def name = column[String]("name", O.PrimaryKey)
+    def accessYear = column[Int]("access_from")
+    def url = column[String]("url")
+    def publisherCode = column[String]("publisher_code")
+    def publisher = foreignKey(ejournalPublishersTableName, publisherCode, 
+                               ejournalPublishers)(_.code)
+    
+    def * = (name, accessYear, url, publisherCode) <> (EJournal.tupled, EJournal.unapply)
+  }
 }
 
 trait SlickDatabaseService extends DatabaseService {
@@ -142,6 +165,44 @@ trait SlickDatabaseService extends DatabaseService {
   private def encryptPassword(pass: String) = {
     pass
   }
+  
+  override def allEJournalPublishers() = DB(name) withSession { implicit session =>
+    ejournalPublishers.list
+  }
+  
+  override def addEJournalPublisher(publisher: EJournalPublisher) = 
+  DB(name) withSession { implicit session =>
+    ejournalPublishers += publisher
+  }
+
+  override def removeEJournalPublisher(publisher: EJournalPublisher) = 
+  DB(name) withSession { implicit session =>
+    val publisherQuery = ejournalPublishers.filter(_.code === publisher.code)
+    publisherQuery.list.headOption.map { p =>
+      ejournals.filter(j => j.publisherCode === p.code && j.name === name).delete
+    }
+    publisherQuery.delete
+  }
+  
+  override def allEJournals(publisherCode: String) = DB(name) withSession {
+    implicit session =>
+    ejournalPublishers.filter(_.code === publisherCode).list.headOption.map { p =>
+      ejournals.filter(_.publisherCode === p.code).list
+    }
+  }
+  
+  override def addEJournal(journal: EJournal) = DB(name) withSession { implicit session =>
+    ejournalPublishers.filter(_.code === journal.publisherCode).list.headOption.map { p =>
+      ejournals += journal
+    }
+  }
+  
+  override def removeEJournal(journal: EJournal) = DB(name) withSession {
+    implicit session =>
+    ejournalPublishers.filter(_.code === journal.publisherCode).list.headOption.map { p =>
+      ejournals.filter(j => j.publisherCode === p.code && j.name === journal.name).delete
+    }
+  }
 
   override def init() {
     DB(name) withSession { implicit session =>
@@ -161,6 +222,12 @@ trait SlickDatabaseService extends DatabaseService {
       }
       if (MTable.getTables(tables.studentUsersAuthTableName).list().isEmpty) {
         tables.studentUsersAuth.ddl.create
+      }
+      if (MTable.getTables(tables.ejournalPublishersTableName).list().isEmpty) {
+        tables.ejournalPublishers.ddl.create
+      }
+      if (MTable.getTables(tables.ejournalsTableName).list().isEmpty) {
+        tables.ejournals.ddl.create
       }
     }
   }
