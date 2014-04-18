@@ -23,13 +23,20 @@ object Forms {
       (bSearch: BookSearch) => bSearch.isDefined
     )
   }
-  
+
+  val loginForm: Form[UserLogin] = Form {
+    mapping(
+      "username" -> nonEmptyText,
+      "password" -> nonEmptyText
+    )(UserLogin.apply)(UserLogin.unapply)
+  }
+
 }
 
 object FormEncapsulators {
-  
   case class BookSearch(isbn: Option[String], title: Option[String], author: Option[String]) {
     def isDefined = isbn.isDefined || title.isDefined || author.isDefined
   }
 
+  case class UserLogin(username: String, password: String)
 }

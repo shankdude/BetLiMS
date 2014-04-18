@@ -3,11 +3,26 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.BetLiMSApplication.index
+GET     /                               controllers.BetLiMSApplication.index
 
 #Search pages
-GET     /search                     controllers.BetLiMSApplication.search(bs: controllers.FormEncapsulators.BookSearch)
-GET     /search                     controllers.BetLiMSApplication.searchPost()
+GET     /search                         controllers.BetLiMSApplication.search(bs: controllers.FormEncapsulators.BookSearch)
+GET     /search                         controllers.BetLiMSApplication.searchPost()
+GET     /links/ejournals                controllers.BetLiMSApplication.links_ejournalPublishers()
+GET     /links/ejournals/:code          controllers.BetLiMSApplication.links_ejournals(code: String)
+POST    /links/ejournals/:code          controllers.BetLiMSApplication.links_ejournalPublishers_insert(code: String)
+DELETE  /links/ejournals/:code          controllers.BetLiMSApplication.links_ejournalPublishers_delete(code: String)
+POST    /links/ejournals/:code/:name    controllers.BetLiMSApplication.links_ejournals_insert(code: String, name: String)
+DELETE  /links/ejournals/:code/:name    controllers.BetLiMSApplication.links_ejournals_delete(code: String, name: String)
+GET     /links/ebooks                   controllers.BetLiMSApplication.links_ebookPublishers()
+GET     /links/ebooks/:code             controllers.BetLiMSApplication.links_ebooks(code: String)
+POST    /links/ebooks/:code             controllers.BetLiMSApplication.links_ebookPublishers_insert(code: String)
+DELETE  /links/ebooks/:code             controllers.BetLiMSApplication.links_ebookPublishers_delete(code: String)
+POST    /links/ebooks/:code/:name       controllers.BetLiMSApplication.links_ebooks_insert(code: String, name: String)
+DELETE  /links/ebooks/:code/:name       controllers.BetLiMSApplication.links_ebooks_delete(code: String, name: String)
+GET     /links/edatabases               controllers.BetLiMSApplication.links_edatabases()
+POST    /links/edatabases/:name         controllers.BetLiMSApplication.links_edatabases_insert(name: String)
+DELETE  /links/edatabases/:name         controllers.BetLiMSApplication.links_edatabases_delete(name: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public/", file)
+GET     /assets/*file                   controllers.Assets.at(path="/public/", file)
