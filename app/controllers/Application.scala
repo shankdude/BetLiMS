@@ -161,4 +161,31 @@ trait BetLiMSRestfulServer extends Controller with DatabaseServiceProvider {
     )
   }
   
+  def links_edatabases() = Action {
+    val edatabase = databaseService.allEDatabases()
+    Ok(Json.toJson(edatabase))
+  }
+  
+  def links_edatabases_insert(name: String) = Action(parse.json) { request =>
+    val edatabaseJSON = request.body
+    edatabaseJSON.validate[EDatabase](edatabaseReads(name)).fold (
+      invalid => BadRequest("Invalid EDatabase Publisher"),
+      valid => {
+        databaseService.removeEDatabase(valid)
+        Ok
+      }
+    )
+  }
+  
+  def links_edatabases_delete(name: String) = Action(parse.json) { request =>
+    val edatabaseJSON = request.body
+    edatabaseJSON.validate[EDatabase](edatabaseReads(name)).fold (
+      invalid => BadRequest("Invalid EDatabase Publisher"),
+      valid => {
+        databaseService.removeEDatabase(valid)
+        Ok
+      }
+    )
+  }
+  
 }

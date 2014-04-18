@@ -39,6 +39,13 @@ object JsonWrappers {
     )
   }
   
+  implicit val edatabaseWrites = new Writes[EDatabase] {
+    def writes(database: EDatabase) = Json.obj(
+      "name" -> database.name,
+      "url" -> database.url
+    )
+  }
+  
   val ejournalPublisherReads: String => Reads[EJournalPublisher] = code => (
     (JsPath \ "name").read[String] and
     (JsPath \ "url").read[String] and
@@ -63,6 +70,11 @@ object JsonWrappers {
     (JsPath \ "url").read[String] and
     (JsPath \ "publisherCode").read[String](defaultValueReads(code))
   )(EBook)
+  
+  val edatabaseReads: (String) => Reads[EDatabase] = (name) => (
+    (JsPath \ "name").read[String](defaultValueReads(name)) and
+    (JsPath \ "url").read[String]
+  )(EDatabase)
 
   def defaultValueReads[T](default: T)(implicit r: Reads[T]) = {
     Reads.optionNoError[T].map(_.getOrElse(default)) keepAnd

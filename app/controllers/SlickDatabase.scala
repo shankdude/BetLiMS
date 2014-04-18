@@ -105,6 +105,15 @@ trait SlickDatabaseTables {
     
     def * = (name, url, publisherCode) <> (EBook.tupled, EBook.unapply)
   }
+  
+  val edatabasesTableName = "edatabases"
+  val edatabases = TableQuery[EDatabaseTable]
+  class EDatabaseTable(tag: Tag) extends Table[EDatabase](tag, edatabasesTableName) {
+    def name = column[String]("name", O.PrimaryKey)
+    def url = column[String]("url")
+    
+    def * = (name, url) <> (EDatabase.tupled, EDatabase.unapply)
+  }
 }
 
 trait SlickDatabaseService extends DatabaseService {
@@ -264,6 +273,21 @@ trait SlickDatabaseService extends DatabaseService {
     }
   }
 
+  override def allEDatabases() = DB(name) withSession { implicit session =>
+    edatabases.list
+  }
+  
+  override def addEDatabase(database: EDatabase) = 
+  DB(name) withSession { implicit session =>
+    edatabases += database
+  }
+
+  override def removeEDatabase(database: EDatabase) = 
+  DB(name) withSession { implicit session =>
+    val databaseQuery = edatabases.filter(_.name === database.name)
+    databaseQuery.delete
+  }
+  
   override def init() {
     DB(name) withSession { implicit session =>
       import scala.slick.jdbc.meta._
@@ -294,6 +318,9 @@ trait SlickDatabaseService extends DatabaseService {
       }
       if (MTable.getTables(tables.ebooksTableName).list().isEmpty) {
         tables.ebooks.ddl.create
+      }
+      if (MTable.getTables(tables.edatabasesTableName).list().isEmpty) {
+        tables.edatabases.ddl.create
       }
     }
   }
