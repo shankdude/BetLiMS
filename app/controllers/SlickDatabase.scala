@@ -60,6 +60,60 @@ trait SlickDatabaseTables {
 
     def * = (userid, password)
   }
+  
+  val ejournalPublishersTableName = "ejournal_publisher"
+  val ejournalPublishers = TableQuery[EJournalPublisherTable]
+  class EJournalPublisherTable(tag: Tag) extends Table[EJournalPublisher](tag, ejournalPublishersTableName) {
+    def name = column[String]("name")
+    def code = column[String]("code", O.PrimaryKey)
+    def url = column[String]("url")
+    
+    def * = (name, code, url) <> (EJournalPublisher.tupled, EJournalPublisher.unapply)
+  }
+  
+  val ejournalsTableName = "ejournals"
+  val ejournals = TableQuery[EJournalTable]
+  class EJournalTable(tag: Tag) extends Table[EJournal](tag, ejournalsTableName) {
+    def name = column[String]("name", O.PrimaryKey)
+    def accessYear = column[Int]("access_from")
+    def url = column[String]("url")
+    def publisherCode = column[String]("publisher_code")
+    def publisher = foreignKey(ejournalPublishersTableName, publisherCode, 
+                               ejournalPublishers)(_.code)
+    
+    def * = (name, accessYear, url, publisherCode) <> (EJournal.tupled, EJournal.unapply)
+  }
+  
+  val ebookPublishersTableName = "ebook_publisher"
+  val ebookPublishers = TableQuery[EBookPublisherTable]
+  class EBookPublisherTable(tag: Tag) extends Table[EBookPublisher](tag, ebookPublishersTableName) {
+    def name = column[String]("name")
+    def code = column[String]("code", O.PrimaryKey)
+    def url = column[String]("url")
+    
+    def * = (name, code, url) <> (EBookPublisher.tupled, EBookPublisher.unapply)
+  }
+  
+  val ebooksTableName = "ebooks"
+  val ebooks = TableQuery[EBookTable]
+  class EBookTable(tag: Tag) extends Table[EBook](tag, ebooksTableName) {
+    def name = column[String]("name", O.PrimaryKey)
+    def url = column[String]("url")
+    def publisherCode = column[String]("publisher_code")
+    def publisher = foreignKey(ebookPublishersTableName, publisherCode, 
+                               ebookPublishers)(_.code)
+    
+    def * = (name, url, publisherCode) <> (EBook.tupled, EBook.unapply)
+  }
+  
+  val edatabasesTableName = "edatabases"
+  val edatabases = TableQuery[EDatabaseTable]
+  class EDatabaseTable(tag: Tag) extends Table[EDatabase](tag, edatabasesTableName) {
+    def name = column[String]("name", O.PrimaryKey)
+    def url = column[String]("url")
+    
+    def * = (name, url) <> (EDatabase.tupled, EDatabase.unapply)
+  }
 }
 
 trait SlickDatabaseService extends DatabaseService {
@@ -142,7 +196,98 @@ trait SlickDatabaseService extends DatabaseService {
   private def encryptPassword(pass: String) = {
     pass
   }
+  
+  override def allEJournalPublishers() = DB(name) withSession { implicit session =>
+    ejournalPublishers.list
+  }
+  
+  override def addEJournalPublisher(publisher: EJournalPublisher) = 
+  DB(name) withSession { implicit session =>
+    ejournalPublishers += publisher
+  }
 
+  override def removeEJournalPublisher(publisher: EJournalPublisher) = 
+  DB(name) withSession { implicit session =>
+    val publisherQuery = ejournalPublishers.filter(_.code === publisher.code)
+    publisherQuery.list.headOption.map { p =>
+      ejournals.filter(j => j.publisherCode === p.code && j.name === name).delete
+    }
+    publisherQuery.delete
+  }
+  
+  override def allEJournals(publisherCode: String) = DB(name) withSession {
+    implicit session =>
+    ejournalPublishers.filter(_.code === publisherCode).list.headOption.map { p =>
+      ejournals.filter(_.publisherCode === p.code).list
+    }
+  }
+  
+  override def addEJournal(journal: EJournal) = DB(name) withSession { implicit session =>
+    ejournalPublishers.filter(_.code === journal.publisherCode).list.headOption.map { p =>
+      ejournals += journal
+    }
+  }
+  
+  override def removeEJournal(journal: EJournal) = DB(name) withSession {
+    implicit session =>
+    ejournalPublishers.filter(_.code === journal.publisherCode).list.headOption.map { p =>
+      ejournals.filter(j => j.publisherCode === p.code && j.name === journal.name).delete
+    }
+  }
+  
+  override def allEBookPublishers() = DB(name) withSession { implicit session =>
+    ebookPublishers.list
+  }
+  
+  override def addEBookPublisher(publisher: EBookPublisher) = 
+  DB(name) withSession { implicit session =>
+    ebookPublishers += publisher
+  }
+
+  override def removeEBookPublisher(publisher: EBookPublisher) = 
+  DB(name) withSession { implicit session =>
+    val publisherQuery = ebookPublishers.filter(_.code === publisher.code)
+    publisherQuery.list.headOption.map { p =>
+      ebooks.filter(j => j.publisherCode === p.code && j.name === name).delete
+    }
+    publisherQuery.delete
+  }
+  
+  override def allEBooks(publisherCode: String) = DB(name) withSession {
+    implicit session =>
+    ebookPublishers.filter(_.code === publisherCode).list.headOption.map { p =>
+      ebooks.filter(_.publisherCode === p.code).list
+    }
+  }
+  
+  override def addEBook(book: EBook) = DB(name) withSession { implicit session =>
+    ebookPublishers.filter(_.code === book.publisherCode).list.headOption.map { p =>
+      ebooks += book
+    }
+  }
+  
+  override def removeEBook(book: EBook) = DB(name) withSession {
+    implicit session =>
+    ebookPublishers.filter(_.code === book.publisherCode).list.headOption.map { p =>
+      ebooks.filter(j => j.publisherCode === p.code && j.name === book.name).delete
+    }
+  }
+
+  override def allEDatabases() = DB(name) withSession { implicit session =>
+    edatabases.list
+  }
+  
+  override def addEDatabase(database: EDatabase) = 
+  DB(name) withSession { implicit session =>
+    edatabases += database
+  }
+
+  override def removeEDatabase(database: EDatabase) = 
+  DB(name) withSession { implicit session =>
+    val databaseQuery = edatabases.filter(_.name === database.name)
+    databaseQuery.delete
+  }
+  
   override def init() {
     DB(name) withSession { implicit session =>
       import scala.slick.jdbc.meta._
@@ -161,6 +306,21 @@ trait SlickDatabaseService extends DatabaseService {
       }
       if (MTable.getTables(tables.studentUsersAuthTableName).list().isEmpty) {
         tables.studentUsersAuth.ddl.create
+      }
+      if (MTable.getTables(tables.ejournalPublishersTableName).list().isEmpty) {
+        tables.ejournalPublishers.ddl.create
+      }
+      if (MTable.getTables(tables.ejournalsTableName).list().isEmpty) {
+        tables.ejournals.ddl.create
+      }
+      if (MTable.getTables(tables.ebookPublishersTableName).list().isEmpty) {
+        tables.ebookPublishers.ddl.create
+      }
+      if (MTable.getTables(tables.ebooksTableName).list().isEmpty) {
+        tables.ebooks.ddl.create
+      }
+      if (MTable.getTables(tables.edatabasesTableName).list().isEmpty) {
+        tables.edatabases.ddl.create
       }
     }
   }
