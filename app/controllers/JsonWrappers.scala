@@ -24,6 +24,21 @@ object JsonWrappers {
     )
   }
   
+  implicit val ebookPublisherWrites = new Writes[EBookPublisher] {
+    def writes(publisher: EBookPublisher) = Json.obj(
+      "name" -> publisher.name,
+      "code" -> publisher.code,
+      "url" -> publisher.url
+    )
+  }
+  
+  implicit val ebookWrites = new Writes[EBook] {
+    def writes(book: EBook) = Json.obj(
+      "name" -> book.name,
+      "url" -> book.url
+    )
+  }
+  
   val ejournalPublisherReads: String => Reads[EJournalPublisher] = code => (
     (JsPath \ "name").read[String] and
     (JsPath \ "url").read[String] and
@@ -36,6 +51,18 @@ object JsonWrappers {
     (JsPath \ "url").read[String] and
     (JsPath \ "publisherCode").read[String](defaultValueReads(code))
   )(EJournal)
+  
+  val ebookPublisherReads: String => Reads[EBookPublisher] = code => (
+    (JsPath \ "name").read[String] and
+    (JsPath \ "url").read[String] and
+    (JsPath \ "code").read[String](defaultValueReads(code))
+  )(EBookPublisher)
+  
+  val ebookReads: (String, String) => Reads[EBook] = (code, name) => (
+    (JsPath \ "name").read[String](defaultValueReads(name)) and
+    (JsPath \ "url").read[String] and
+    (JsPath \ "publisherCode").read[String](defaultValueReads(code))
+  )(EBook)
 
   def defaultValueReads[T](default: T)(implicit r: Reads[T]) = {
     Reads.optionNoError[T].map(_.getOrElse(default)) keepAnd

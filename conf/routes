@@ -14,6 +14,12 @@ POST    /links/ejournals/:code          controllers.BetLiMSApplication.links_ejo
 DELETE  /links/ejournals/:code          controllers.BetLiMSApplication.links_ejournalPublishers_delete(code: String)
 POST    /links/ejournals/:code/:name    controllers.BetLiMSApplication.links_ejournals_insert(code: String, name: String)
 DELETE  /links/ejournals/:code/:name    controllers.BetLiMSApplication.links_ejournals_delete(code: String, name: String)
+GET     /links/ebooks                   controllers.BetLiMSApplication.links_ebookPublishers()
+GET     /links/ebooks/:code             controllers.BetLiMSApplication.links_ebooks(code: String)
+POST    /links/ebooks/:code             controllers.BetLiMSApplication.links_ebookPublishers_insert(code: String)
+DELETE  /links/ebooks/:code             controllers.BetLiMSApplication.links_ebookPublishers_delete(code: String)
+POST    /links/ebooks/:code/:name       controllers.BetLiMSApplication.links_ebooks_insert(code: String, name: String)
+DELETE  /links/ebooks/:code/:name       controllers.BetLiMSApplication.links_ebooks_delete(code: String, name: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                   controllers.Assets.at(path="/public/", file)

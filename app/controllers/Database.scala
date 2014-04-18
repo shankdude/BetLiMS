@@ -15,6 +15,8 @@ object Models {
   
   case class EJournalPublisher(name: String, code: String, url: String)
   case class EJournal(name: String, accessYear: Int, url: String, publisherCode: String)
+  case class EBookPublisher(name: String, code: String, url: String)
+  case class EBook(name: String, url: String, publisherCode: String)
 }
 
 trait DatabaseService {
@@ -40,6 +42,18 @@ trait DatabaseService {
   def addEJournal(journal: EJournal): Option[Unit]
   
   def removeEJournal(journal: EJournal): Option[Unit]
+  
+  def allEBookPublishers(): List[EBookPublisher]
+  
+  def addEBookPublisher(publisher: EBookPublisher): Unit
+  
+  def removeEBookPublisher(publisher: EBookPublisher): Unit
+  
+  def allEBooks(publisherCode: String): Option[List[EBook]]
+  
+  def addEBook(book: EBook): Option[Unit]
+  
+  def removeEBook(book: EBook): Option[Unit]
 
   def init(): Unit
 }

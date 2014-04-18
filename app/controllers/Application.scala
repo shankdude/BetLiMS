@@ -98,4 +98,67 @@ trait BetLiMSRestfulServer extends Controller with DatabaseServiceProvider {
     )
   }
   
+  def links_ebookPublishers() = Action {
+    val ebookPublishers = databaseService.allEBookPublishers()
+    Ok(Json.toJson(ebookPublishers))
+  }
+  
+  def links_ebookPublishers_insert(code: String) = Action(parse.json) { request =>
+    val ebPublisherJSON = request.body
+    ebPublisherJSON.validate[EBookPublisher](ebookPublisherReads(code)).fold (
+      invalid => BadRequest("Invalid EBook Publisher"),
+      valid => {
+        databaseService.addEBookPublisher(valid)
+        Ok
+      }
+    )
+  }
+  
+  def links_ebookPublishers_delete(code: String) = Action(parse.json) { request =>
+    val ebPublisherJSON = request.body
+    ebPublisherJSON.validate[EBookPublisher](ebookPublisherReads(code)).fold (
+      invalid => BadRequest("Invalid EBook Publisher"),
+      valid => {
+        databaseService.removeEBookPublisher(valid)
+        Ok
+      }
+    )
+  }
+  
+  def links_ebooks(code: String) = Action {
+    databaseService.allEBooks(code).map { list =>
+      Ok(Json.toJson(list))
+    } getOrElse {
+      NotFound(s"Product code $code not found")
+    }
+  }
+  
+  def links_ebooks_insert(code: String, name: String) = Action(parse.json) { request =>
+    val ebookJSON = request.body
+    ebookJSON.validate[EBook](ebookReads(code, name)).fold (
+      invalid => BadRequest("Invalid EBook"),
+      valid => {
+        databaseService.addEBook(valid).map { _ =>
+          Ok
+        } getOrElse {
+          NotFound(s"Product code $code not found")
+        }
+      }
+    )
+  }
+  
+  def links_ebooks_delete(code: String, name: String) = Action(parse.json) { request =>
+    val ebookJSON = request.body
+    ebookJSON.validate[EBook](ebookReads(code, name)).fold (
+      invalid => BadRequest("Invalid EBook"),
+      valid => {
+        databaseService.removeEBook(valid).map { _ =>
+          Ok
+        } getOrElse {
+          NotFound(s"Product code $code not found")
+        }
+      }
+    )
+  }
+  
 }
