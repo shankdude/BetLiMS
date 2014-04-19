@@ -6,9 +6,6 @@
     <head><meta charset="UTF-8">
     
         <title>@title</title>
-        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/main.css")' type="text/css" >
-        <link rel="stylesheet" href='@routes.Assets.at(s"stylesheets/${style}.css")' type="text/css" >
-        <script src='@routes.Assets.at("javascripts/jquery.js")' type="text/javascript"></script>
         <script>
 	    $(document).ready(function(){
 	    $('#login-trigger').click(function(){
@@ -21,6 +18,12 @@
 	  });
 
         </script>
+        
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/reset.css")' type="text/css" >
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/main.css")' type="text/css" >
+        <link rel="stylesheet" href='@routes.Assets.at(s"stylesheets/${style}.css")' type="text/css" >
+        <script src='@routes.Assets.at("javascripts/jquery.js")' type="text/javascript"></script>
+        
     </head>
     <body>
     <div id='cssmenu'>
@@ -52,11 +55,9 @@
      <div id="page_header">
        
        <div id="page_heading">
-	 <h1>
-	 </h1>
        
        <h2>
-	 <a>Welcome to IIT PATNA Library</a>
+	 Welcome to IIT PATNA Library
        </h2>
        
      </div>

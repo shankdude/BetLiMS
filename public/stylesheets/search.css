@@ -17,7 +17,7 @@
 
 .title {
 	float: left;
-	width: 300px;
+	width: 30%;
 	text-align: left;
 	font-weight: bold;
 }
@@ -173,4 +173,14 @@ div.left {
 
 #issue:hover {
 	transform: scale(1.1);
+}
+
+#new_item_header {
+	margin-top: 20px;
+	
+}
+
+#new_item_header h1 {
+	color: #e1e1e1;
+	font-size: 30px;
 }

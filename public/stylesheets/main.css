@@ -253,10 +253,11 @@ li #login-content {
 
 #page_header {
 	width: 100%;
-	height: 205px;
+	height: 100%;
 	color: #fff;
 	overflow: hidden;
 	background: #743C33 ;
+	
 }
 
 #page_header a {
@@ -269,19 +270,15 @@ li #login-content {
 }
 
 
-#page_heading h1 {
-	width: 20%;
-	height: 205px;
-	padding-top:50px;
-	background:#743C33  ;
-	float: left;
-}
 
 
 #page_heading h2 {
+	margin-left:auto;
+	margin-right:auto;
 	width: 80%;
-	height: 205px;
-	padding-top:70px;
+	height:100%;
+	padding-top:5%;
+	padding-bottom:5%;
 	background:#A85C50 ;
 	font-size: 30px;
 	text-align: center;

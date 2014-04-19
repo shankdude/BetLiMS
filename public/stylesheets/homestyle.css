@@ -1,57 +1,7 @@
 
 
 
-* {
-	margin: 5px;
-	padding: 0px;
-}
 
-body {
-	height: 100%;
-	background-color: rgb(101, 13, 38);
-	color: #80776e;
-	font-family: 'Elsie', cursive;
-	font-size: 10px;
-	text-align: center;
-}
-
-a {
-	color: #85859c;
-	text-decoration: underline;
-}
-
-a:hover {
-	color: #69699c;
-}
-
-@font-face {
-	font-family: 'Elsie';
-	src: url('../fonts/Elsie-Regular.ttf');
-}
-@font-face {
-	font-family: 'Gilda Display';
-	src: url('../fonts/GildaDisplay-Regular.ttf');
-	
-}
-
-img {
-	border: none;
-}
-
-p {
-	margin: 10px 0px 5px;
-	text-align: justify;
-}
-
-.clearthis {
-	margin : 0px;
-	height : 1px;
-	clear : both;
-	float : none;
-	font-size : 1px;
-	line-height : 0px;
-	overflow : hidden;
-}
 
 
 
@@ -87,7 +37,7 @@ p {
 	padding: 5px 10px;
 	float: left;
 	background: #5C4837;
-	height:75%;
+	height:65%;
 }
 /*this*/
 
