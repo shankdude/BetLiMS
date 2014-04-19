@@ -145,9 +145,6 @@ p {
   
 }
 
-#signup a {
-}
-
 #login-trigger {
   color: #fff;
   text-align: center;
@@ -156,14 +153,8 @@ p {
 }
 
 #login-trigger:hover,
-#login .active,
 #signup a:hover {
   background:#000000;
-}
-
-#login .active{
-  border-radius: 5px;
-  border: 1px solid #650d26;  
 }
 
 #login-content {
@@ -174,10 +165,6 @@ p {
   z-index: 999;
 }
 
-li #login-content {
-  right: 0;
-  width: 250px;  
-}
 
 /*--------------------*/
 
@@ -260,14 +247,8 @@ li #login-content {
 	
 }
 
-#page_header a {
-	color:#E6E6E6 ;
-	text-decoration: none;
-}
 
-#page_header a:hover {
-	color: #e1e1e1;
-}
+
 
 
 

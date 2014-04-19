@@ -22,13 +22,6 @@
 	background: #831618;
 }
 
-#main_content .h_divider {
-	margin-bottom: 2px;
-	height: 1px;
-	background: #831618;
-	overflow: hidden;
-}
-
 
 /* New Item Description */
 /*this is for whole page*/
@@ -81,17 +74,7 @@
 	margin-left: 10px;
 }
 
-#new_item_link {
-	float: left;
-	clear: left;
-	width: 100%;
-	font-weight: bold;
-	text-align: right;
-}
 
-#new_item_link a {
-	text-decoration: none;
-}
 
 
 /* Sub Items Descriptions */

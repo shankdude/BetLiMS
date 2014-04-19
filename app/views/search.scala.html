@@ -21,12 +21,14 @@
   
     @books match {
       case Some(b) => { 
+      @if(b.isEmpty){
+	  <p id="empty">No Search Results Found</p>
+      } else{
 	<div class="container"> 
   <div class="clear"></div> 
    
         @for(book <- b) {
         <div class="left">
-   
 	     <div class="title">Title: @book.title </div>
              <div class="author">Author: @book.author </div>
              <div class="copies">No. of Copies: @book.copies </div>
@@ -34,15 +36,16 @@
              <div class="right"><input type="checkbox" /></div>
   </div>
   
-  
-        }
+  }
   <div class="clear"></div>   
 </div>
+  <div class="issue">{
+    <button type="submit">Issue Books</button></div>
+    }
+        }
   
       }
       case None => {}
      }
-    <div class="grow">{
-    <button id="grow" type="submit">Issue Books</button></div>
-    }
+    
 }
