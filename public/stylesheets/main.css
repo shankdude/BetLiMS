@@ -40,143 +40,13 @@ p {
 	text-align: justify;
 }
 
-#cssmenu ul,
-#cssmenu li,
-#cssmenu a {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  line-height: 1;
-  font-family: 'Lato', sans-serif;
+#showLeft
+{
+  float:left;
 }
-#cssmenu {
-  border: 1px solid #000000;
-  border-radius: 0px;
-  width: 70%;
-  background: #650d26;
-}
-
-#cssmenu ul {
-  background: #650d26;
-  float: left;
-  width: 100%;
-  /*background: linear-gradient(top, #650d26 0%, #380715 100%);
-  
-  /*progid:DXImageTransform.Microsoft.gradient(startColorstr='@top-color', endColorstr='@bottom-color', GradientType=0);*/
-  padding: 5px 10px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-}
-#cssmenu ul:before {
-  content: '';
-  display: block;
-}
-#cssmenu ul:after {
-  content: '';
-  display: table;
-  clear: both;
-}
-#cssmenu li {
-  float: left;
-  margin: 0 5px 0 0;
-  border: 1px solid transparent;
-}
-#cssmenu li a {
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  padding: 8px 15px 9px 15px;
-  display: block;
-  text-decoration: none;
-  color: #ffffff;
-  border: 1px solid transparent;
-  font-size: 16px;
-}
-#cssmenu li.active {
-  border-radius: 5px;
-  border: 1px solid #650d26;
-}
-#cssmenu li.active a {
-  border-radius: 5px;
-  display: block;
-  background: #0b0104;
-  border: 1px solid #000000;
-  box-shadow: inset 0 5px 10px #000000;
-}
-#cssmenu li:hover {
-  border-radius: 5px;
-  border: 1px solid #650d26;
-}
-#cssmenu li:hover a {
-  border-radius: 5px;
-  display: block;
-  background: #0b0104;
-  border: 1px solid #000000;
-  box-shadow: inset 0 5px 10px #000000;
-}
-
-#login {
-  background: #650d26;
-  float: right;
-  border-radius: 5px;
-  padding: 8px 15px 9px 15px;
-  display: block;
-  text-decoration: none;
-  color: #fff;
-  border: 1px solid transparent;
-  font-size: 16px;
-}
-
-#login-trigger,
-#signup a {
-  display: inline-block; 
-  line-height: 1px;
-  height: 16px;
-  background-color:#650d26; 
-	padding:6px 11px; 
-	letter-spacing:-1px; 
-	font: bold 0.89em'CartoGothicStdBook',  Arial, Helvetica, sans-serif; 
-	text-transform: uppercase; 
-	color: #fff; 
-	-moz-border-radius: 7px;  
-	-webkit-border-radius: 5px;   
-	border-radius: 7px;
-  
-  
-}
-
-#signup a {
-}
-
-#login-trigger {
-  color: #fff;
-  text-align: center;
-	font-size: 16px;
-  text-decoration: none;
-}
-
-#login-trigger:hover,
-#login .active,
-#signup a:hover {
-  background:#000000;
-}
-
-#login .active{
-  border-radius: 5px;
-  border: 1px solid #650d26;  
-}
-
-#login-content {
-  display: none;
-  position: fixed;
-  top: 50px;
-  right: 0;
-  z-index: 999;
-}
-
-li #login-content {
-  right: 0;
-  width: 250px;  
+#showRightPush
+{
+  float:right;
 }
 
 /*--------------------*/
@@ -199,57 +69,6 @@ li #login-content {
 }
 
 /*--------------------*/
-
-#login #actions {
-  margin: 10px 0 0 0;
-}
-
-#login #submit {    
-  background-color: #d14545;
-  /*background-image: linear-gradient(top, #e97171, #d14545);*/
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  text-shadow: 0 1px 0 rgba(0,0,0,.5);
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.3) inset;    
-  border: 1px solid #7e1515;
-  float: left;
-  height: 30px;
-  padding: 0;
-  width: 100px;
-  cursor: pointer;
-  font: bold 14px Arial, Helvetica;
-  color: #fff;
-}
-
-#login #submit:hover,
-#login #submit:focus {    
-  background-color: #e97171;
-  /*background-image: linear-gradient(top, #d14545, #e97171);*/
-  border-radius: 5px;
-  border: 1px solid #650d26;  
-} 
-
-#login #submit:active {   
-  outline: none;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset; 
-  
-}
-
-#login #submit::-moz-focus-inner {
-  border: none;
-}
-
-#login label {
-  float: right;
-  line-height: 30px;
-}
-
-#login label input {
-  position: relative;
-  top: 2px;
-  right: 2px;
-}
 
 #page_header {
 	width: 100%;
