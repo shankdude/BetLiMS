@@ -1,5 +1,5 @@
 
-@(form : Form[BookSearch])(books: Option[List[Book]])
+@(form: Form[BookSearch])(books: Option[List[Book]])(implicit user: Option[User], loginForm: Form[UserLogin])
 
 @main("Search")("search") {
    
