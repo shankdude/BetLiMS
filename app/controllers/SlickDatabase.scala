@@ -72,6 +72,37 @@ trait SlickDatabaseTables {
 
     def * = (userid, name, year, branch) <> (StudentUser.tupled, StudentUser.unapply)
   }
+  
+  val issueHistoryTableName = "issue_history"
+  val issueHistory = TableQuery[IssueHistoryTable]
+  class IssueHistoryTable(tag: Tag) extends Table[IssueEntry](tag, issueHistoryTableName) {
+    def isbn = column[String]("isbn")
+    def userid = column[String]("user_id")
+    def date = column[SqlDate]("date")
+    
+    def * = (date, isbn, userid) <> (IssueEntry.tupled, IssueEntry.unapply)
+  }
+  
+  val issueRequestHistoryTableName = "issue_request_history"
+  val issueRequestHistory = TableQuery[IssueRequestHistoryTable]
+  class IssueRequestHistoryTable(tag: Tag) extends Table[IssueEntry](tag, issueHistoryTableName) {
+    def isbn = column[String]("isbn")
+    def userid = column[String]("user_id")
+    def date = column[SqlDate]("date")
+    
+    def * = (date, isbn, userid) <> (IssueEntry.tupled, IssueEntry.unapply)
+  }
+  
+  val returnHistoryTableName = "return_history"
+  val returnHistory = TableQuery[ReturnHistoryTable]
+  class ReturnHistoryTable(tag: Tag) extends Table[ReturnEntry](tag, returnHistoryTableName) {
+    def isbn = column[String]("isbn")
+    def userid = column[String]("user_id")
+    def issueDate = column[SqlDate]("issue_date")
+    def returnDate = column[SqlDate]("return_date")
+    
+    def * = (issueDate, isbn, userid, returnDate) <> (ReturnEntry.tupled, ReturnEntry.unapply)
+  }
 
   val adminsTableName = "admin_user"
   val admins = TableQuery[AdminTable]
@@ -226,6 +257,47 @@ trait SlickDatabaseService extends DatabaseService {
     }
   }
 
+  def issueRequest(b: Book, s: StudentUser) = {
+    Left("Unimplemented")
+  }
+  def issueBook(isbn: String, userid: String) = DB(name) withSession { implicit session =>
+    val today = new SqlDate(System.currentTimeMillis)
+    val issued = tables.issueHistory.filter(_.isbn === isbn).list.length
+    val total = tables.bookVariables.filter(_.isbn === isbn).map(_.copies).list.head
+    val issueReqQ = tables.issueRequestHistory.filter(ie => ie.isbn === isbn && ie.userid === userid)
+    //Include issuerequest history in the condition
+    if (issued < total) {
+      val today = new SqlDate(System.currentTimeMillis)
+      tables.issueHistory += IssueEntry(today, isbn, userid)
+      Right()
+    } else {
+      Left("No more copies left")
+    }
+  }
+  def returnBook(isbn: String, userid: String) = DB(name) withSession { implicit session =>
+    val issueQ = tables.issueHistory.filter(ie => ie.isbn === isbn && ie.userid === userid)
+    issueQ.list.headOption match {
+      case Some(issue) =>
+        val today = new SqlDate(System.currentTimeMillis)
+        issueQ.delete
+        tables.returnHistory += ReturnEntry(issue.date, issue.isbn, issue.userid, today)
+        Right()
+      case None => Left("No issue entry found")
+    }
+  }
+  
+  def issueList() = DB(name) withSession { implicit session =>
+    tables.issueHistory.list
+  }
+  
+  def issueRequestList() = DB(name) withSession { implicit session =>
+    tables.issueRequestHistory.list
+  }
+  
+  def returnList() = DB(name) withSession { implicit session =>
+    tables.returnHistory.list
+  }
+  
   def insertUser(u: Seq[(User, String)]) {
     DB(name) withSession { implicit session =>
       for ((user, pass) <- u) {
@@ -377,6 +449,15 @@ trait SlickDatabaseService extends DatabaseService {
       }
       if (MTable.getTables(tables.bookPurchaseDetailsTableName).list().isEmpty) {
         tables.bookPurchaseDetails.ddl.create
+      }
+      if (MTable.getTables(tables.issueHistoryTableName).list().isEmpty) {
+        tables.issueHistory.ddl.create
+      }
+      if (MTable.getTables(tables.issueRequestHistoryTableName).list().isEmpty) {
+        tables.issueRequestHistory.ddl.create
+      }
+      if (MTable.getTables(tables.returnHistoryTableName).list().isEmpty) {
+        tables.returnHistory.ddl.create
       }
       if (MTable.getTables(tables.studentsTableName).list().isEmpty) {
         tables.students.ddl.create
