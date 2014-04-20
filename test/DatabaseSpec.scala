@@ -12,25 +12,25 @@ class DatabaseSpec extends BetLiMSSpec {
 
     "search for a book" in withInMemoryDatabase { db =>
 
-      db insertBooks Seq (
-        Book("12345", "Intro 1", "Ashu", 4),
-        Book("12356", "Intro 2", "Ashutosh", 1),
-        Book("13356", "Intro 3", "XYZtosh", 1)
+      db addBooks Seq (
+        Book("12345", "Intro 1", "Ashu", "XYZ Publisher", 1, 2008, 504, "537.6 GRI/I P08"),
+        Book("12356", "Intro 2", "Ashutosh", "1 Publishers", 2, 2009, 652, "535 THO/O P06"),
+        Book("13356", "Intro 3", "XYZtosh", "21 Publications", 3, 2010, 444, "539.2 HEA/C N95")
       )
 
-      val bs1 = BookSearch(None, None, Some("Ashu"))
+      val bs1 = BookSearch(None, None, Some("Ashu"), None, None, None)
       db.booksearch(bs1) must beEqualTo(List[Book](
-        Book("12345", "Intro 1", "Ashu", 4),
-        Book("12356", "Intro 2", "Ashutosh", 1)
+        Book("12345", "Intro 1", "Ashu", "XYZ Publisher", 1, 2008, 504, "537.6 GRI/I P08"),
+        Book("12356", "Intro 2", "Ashutosh", "1 Publishers", 2, 2009, 652, "535 THO/O P06")
       ))
 
-      val bs2 = BookSearch(None, None, Some("tosh"))
+      val bs2 = BookSearch(None, None, Some("tosh"), None, None, None)
       db.booksearch(bs2) must beEqualTo(List[Book](
-        Book("12356", "Intro 2", "Ashutosh", 1),
-        Book("13356", "Intro 3", "XYZtosh", 1)
+        Book("12356", "Intro 2", "Ashutosh", "1 Publishers", 2, 2009, 652, "535 THO/O P06"),
+        Book("13356", "Intro 3", "XYZtosh", "21 Publications", 3, 2010, 444, "539.2 HEA/C N95")
       ))
       
-      db.booksearch(bs2) must not be equalTo(List[Book]())
+      db.booksearch(bs2) must not be equalTo(List[(Book, BookVariables)]())
     }
 
     "authenticateAdminUsers()" >> withInMemoryDatabase { db =>

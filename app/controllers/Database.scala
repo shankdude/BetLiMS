@@ -4,10 +4,16 @@ package controllers
 import play.api.db._
 import play.api.Play.current 
 
+import java.sql.{Date => SQLDate}
+
 import FormEncapsulators._;
 
 object Models {
-  case class Book(isbn: String, title: String, author: String, copies: Int)
+  case class Book(isbn: String, title: String, author: String, publisher: String,
+                  edition: Int, publishYear: Int, pages: Int, callNo: String)
+  case class BookVariables(isbn: String, copies: Int, references: Int, checkouts: Int)
+  case class BookPurchase(refID: Int, date: SQLDate)
+  case class BookPurchaseDetails(refID: Int, isbn: String, copies: Int, references: Int)
   
   sealed abstract class User(val userid: String)
   case class StudentUser(override val userid: String, name: String, year: Int, branch: String) extends User(userid)
@@ -26,7 +32,9 @@ trait DatabaseService {
 
   init()
 
-  def booksearch(q: BookSearch): List[Book]
+  def booksearch(q: BookSearch): List[(Book, BookVariables)]
+  def addBooks(book: Seq[Book]): Unit
+  def purchaseBook(details: Seq[BookPurchaseDetails]): Unit
 
   def authenticateStudentUser(q: UserLogin): Option[StudentUser]  
   def authenticateAdminUser(q: UserLogin): Option[AdminUser]

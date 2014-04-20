@@ -15,9 +15,12 @@ object Forms {
 
   val searchForm: Form[BookSearch] = Form {
     mapping(
-      "isbn" -> optional(text),
-      "title" -> optional(text),
-      "author" -> optional(text)
+      "isbn" -> optional(nonEmptyText),
+      "title" -> optional(nonEmptyText),
+      "author" -> optional(nonEmptyText),
+      "publisher" -> optional(nonEmptyText),
+      "edition" -> optional(number),
+      "publishYear" -> optional(number)
     )(BookSearch.apply)(BookSearch.unapply) verifying(
       "Form must contain at least one filled field",
       (bSearch: BookSearch) => bSearch.isDefined
@@ -34,8 +37,10 @@ object Forms {
 }
 
 object FormEncapsulators {
-  case class BookSearch(isbn: Option[String], title: Option[String], author: Option[String]) {
-    def isDefined = isbn.isDefined || title.isDefined || author.isDefined
+  case class BookSearch(isbn: Option[String], title: Option[String], author: Option[String],
+    publisher: Option[String], edition: Option[Int], publishYear: Option[Int]) {
+    def isDefined = isbn.isDefined || title.isDefined || author.isDefined || 
+      publisher.isDefined || edition.isDefined || publishYear.isDefined
   }
 
   case class UserLogin(username: String, password: String)

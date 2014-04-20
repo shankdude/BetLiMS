@@ -1,5 +1,5 @@
 
-@(form : Form[BookSearch])(books: Option[List[Book]])
+@(form : Form[BookSearch])(books: Option[List[(Book, BookVariables)]])
 
 @main("Search") {
    
@@ -22,7 +22,7 @@
     @books match {
       case Some(b) => { 
       
-        @for(book <- b) {
+        @for((book, bookVariables) <- b) {
         <div id="tbl">
     <table border="4px" align="center" topmargin="10px">
     <thead>
@@ -40,7 +40,7 @@
           <tr>
             <td> @book.title </td>
             <td> @book.author </td>
-            <td> @book.copies </td>
+            <td> @bookVariables.copies </td>
           </tr> 
       </tbody>
   </table>
