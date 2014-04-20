@@ -17,17 +17,27 @@ class DatabaseSpec extends BetLiMSSpec {
         Book("12356", "Intro 2", "Ashutosh", "1 Publishers", 2, 2009, 652, "535 THO/O P06"),
         Book("13356", "Intro 3", "XYZtosh", "21 Publications", 3, 2010, 444, "539.2 HEA/C N95")
       )
+      
+      db purchaseBook Seq (
+        BookPurchaseDetails(-1, "12345", 12, 3),
+        BookPurchaseDetails(-1, "12356", 13, 4),
+        BookPurchaseDetails(-1, "13356", 14, 4)
+      )
 
       val bs1 = BookSearch(None, None, Some("Ashu"), None, None, None)
-      db.booksearch(bs1) must beEqualTo(List[Book](
-        Book("12345", "Intro 1", "Ashu", "XYZ Publisher", 1, 2008, 504, "537.6 GRI/I P08"),
-        Book("12356", "Intro 2", "Ashutosh", "1 Publishers", 2, 2009, 652, "535 THO/O P06")
+      db.booksearch(bs1) must beEqualTo(List[(Book, BookVariables)](
+        Book("12345", "Intro 1", "Ashu", "XYZ Publisher", 1, 2008, 504, "537.6 GRI/I P08") ->
+          BookVariables("12345", 12, 3, 0),
+        Book("12356", "Intro 2", "Ashutosh", "1 Publishers", 2, 2009, 652, "535 THO/O P06") ->
+          BookVariables("12356", 13, 4, 0)
       ))
 
       val bs2 = BookSearch(None, None, Some("tosh"), None, None, None)
-      db.booksearch(bs2) must beEqualTo(List[Book](
-        Book("12356", "Intro 2", "Ashutosh", "1 Publishers", 2, 2009, 652, "535 THO/O P06"),
-        Book("13356", "Intro 3", "XYZtosh", "21 Publications", 3, 2010, 444, "539.2 HEA/C N95")
+      db.booksearch(bs2) must beEqualTo(List[(Book, BookVariables)](
+        Book("12356", "Intro 2", "Ashutosh", "1 Publishers", 2, 2009, 652, "535 THO/O P06") ->
+          BookVariables("12356", 13, 4, 0),
+        Book("13356", "Intro 3", "XYZtosh", "21 Publications", 3, 2010, 444, "539.2 HEA/C N95") ->
+          BookVariables("13356", 14, 4, 0)
       ))
       
       db.booksearch(bs2) must not be equalTo(List[(Book, BookVariables)]())

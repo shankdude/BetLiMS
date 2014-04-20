@@ -52,10 +52,12 @@ trait SlickDatabaseTables {
   val bookPurchaseDetailsTableName = "book_purchase_details"
   val bookPurchaseDetails = TableQuery[BookPurchaseDetailsTable]
   class BookPurchaseDetailsTable(tag: Tag) extends Table[BookPurchaseDetails](tag, bookPurchaseDetailsTableName) {
-    def refID = column[Int]("ref_id", O.PrimaryKey)
+    def refID = column[Int]("ref_id")
     def isbn = column[String]("isbn")
     def copies = column[Int]("copies")
     def references = column[Int]("references")
+    
+    def key = primaryKey("key", (refID, isbn))
 
     def * = (refID, isbn, copies, references) <> (BookPurchaseDetails.tupled, BookPurchaseDetails.unapply)
   }
@@ -165,67 +167,62 @@ trait SlickDatabaseService extends DatabaseService {
   implicit val application: Application
   val name: String = "default"
 
-  override def addBooks(b: Seq[Book]) {
+  override def addBooks(books: Seq[Book]) {
     DB withSession { implicit session =>
-      tables.books ++= b
+      for (b <- books) {
+        tables.books += b
+        tables.bookVariables += BookVariables(b.isbn, 0, 0, 0)
+      }
     }
   }
 
-  override def purchaseBook(details: Seq[BookPurchaseDetails]) = DB(name) withTransaction {
+  override def purchaseBook(_details: Seq[BookPurchaseDetails]) = DB(name) withTransaction {
   implicit session =>  
     val date = new SqlDate(System.currentTimeMillis)
     val refID = (bookPurchases returning bookPurchases.map(_.refID)) += BookPurchase(-1, date)
-    bookPurchaseDetails ++= (details map (d => BookPurchaseDetails(refID, d.isbn, d.copies, d.references)))
+    val details = _details map (d => BookPurchaseDetails(refID, d.isbn, d.copies, d.references))
+    for (d <- details) {
+      tables.bookPurchaseDetails += d
+      val q = tables.bookVariables.filter(_.isbn === d.isbn).map(bv => (bv.copies, bv.references))
+      val present = q.list.head
+      q.update((present._1 + d.copies, present._2 + d.references))
+    }
   }
 
   override def booksearch(q: BookSearch): List[(Book, BookVariables)] = {
     DB(name) withSession { implicit session =>
-      val v0 = tables.books zip tables.bookVariables
+      val v0 = tables.books
 
       val v1 = q.isbn match {
-        case Some(x) => v0.filter{ y =>
-            val (b, bv) = y
-            b.isbn.like("%" + x + "%")
-        }
+        case Some(x) => v0.filter{ _.isbn.like("%" + x + "%") }
         case None    => v0
       }
       val v2 = q.title match {
-        case Some(x) => v1.filter{ y =>
-            val (b, bv) = y
-            b.title.like("%" + x + "%")
-        }
+        case Some(x) => v1.filter{ _.title.like("%" + x + "%") }
         case None    => v1
       }
       val v3 = q.author match {
-        case Some(x) => v2.filter{ y =>
-            val (b, bv) = y
-            b.author.like("%" + x + "%")
-        }
+        case Some(x) => v2.filter{ _.author.like("%" + x + "%") }
         case None    => v2
       }
       val v4 = q.publisher match {
-        case Some(x) => v3.filter{ y =>
-            val (b, bv) = y
-            b.publisher.like("%" + x + "%")
-        }
+        case Some(x) => v3.filter{ _.publisher.like("%" + x + "%") }
         case None    => v3
       }
       val v5 = q.edition match {
-        case Some(x) => v4.filter{ y =>
-            val (b, bv) = y
-            b.edition === x 
-        }
+        case Some(x) => v4.filter{ _.edition === x }
         case None    => v4
       }
       val v6 = q.publishYear match {
-        case Some(x) => v5.filter{ y =>
-            val (b, bv) = y
-            b.publishYear === x
-        }
+        case Some(x) => v5.filter{ _.publishYear === x }
         case None    => v5
       }
-      
-      v6.list
+      println(v6.list)
+      val v7 = for {
+        b <- v6
+        bv <- bookVariables.filter(_.isbn === b.isbn)
+      } yield(b, bv)
+      v7.list
     }
   }
 
