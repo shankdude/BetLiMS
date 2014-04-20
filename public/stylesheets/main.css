@@ -42,11 +42,27 @@ p {
 
 #showLeft
 {
-  float:left;
-}
+  overflow:hidden;
+  position: absolute;
+top:0;
+right:10px;
+width: 10;
+float:right;
+height: 5%;
+left:0; 
+/*left:0px
+*/}
 #showRightPush
 {
-  float:right;
+   /*background:url(login.png) no-repeat;
+  */float:right;
+  position: absolute;
+top:0;
+right:10px;
+width: 10;
+float:right;
+height: 5%;
+
 }
 
 /*--------------------*/
@@ -88,16 +104,10 @@ p {
 }
 
 
-#page_heading h1 {
-	width: 20%;
-	height: 205px;
-	padding-top:50px;
-	background:#743C33  ;
-	float: left;
-}
-
 
 #page_heading h2 {
+	margin-right:auto;
+	margin-left:auto;
 	width: 80%;
 	height: 205px;
 	padding-top:70px;
@@ -105,4 +115,28 @@ p {
 	font-size: 30px;
 	text-align: center;
 }
-
+.outer {
+    width: 100px;
+    height: 100px;
+    -webkit-box-shadow: 0px 0px 10px #4d4d4d;
+    -moz-box-shadow: 0px 0px 10px #4d4d4d;
+    box-shadow: 0px 0px 10px #4d4d4d;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -khtml-border-radius: 8px;  
+    border-radius: 8px;
+    border:solid white 3px;
+    overflow: hidden;
+    padding: 10px;
+}
+.image {
+    
+    padding: 0;
+     -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -khtml-border-radius: 8px;  
+    border-radius: 8px;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+}
