@@ -14,18 +14,18 @@ object BetLiMSApplication extends BetLiMSApplication with BetLiMSRestfulServer {
 trait BetLiMSApplication extends Controller with DatabaseServiceProvider{
 
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+    Ok(views.html.index("Your new application is ready.")(None, Forms.loginForm))
   }
 
   def search(bs: BookSearch) = Action {
     val list = databaseService.booksearch(bs)
-    Ok(views.html.search(Forms.searchForm.fill(bs))(Some(list)))
+    Ok(views.html.search(Forms.searchForm.fill(bs))(Some(list))(None, Forms.loginForm))
   }
 
   def searchPost() = Action { implicit request =>
     println("Trying to bind form request")
     Forms.searchForm.bindFromRequest.fold (
-      fe => BadRequest(views.html.search(fe)(None)),
+      fe => BadRequest(views.html.search(fe)(None)(None, Forms.loginForm)),
       bs => Redirect(routes.BetLiMSApplication.search(bs))
     )
   }
