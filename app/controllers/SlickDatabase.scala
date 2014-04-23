@@ -278,6 +278,7 @@ trait SlickDatabaseService extends DatabaseService with DatabaseServiceMessages 
       Left(USER_LIMIT_REACHED)
     }
   }
+  
   def issueBook(isbn: String, userid: String) = DB(name) withSession { implicit session =>
     val userIssued = tables.issueHistory.filter(_.userid === userid).list.length
     if (userIssued < 3) {
@@ -301,6 +302,7 @@ trait SlickDatabaseService extends DatabaseService with DatabaseServiceMessages 
        Left(USER_LIMIT_REACHED)
     }
   }
+  
   def returnBook(isbn: String, userid: String) = DB(name) withSession { implicit session =>
     val issueQ = tables.issueHistory.filter(ie => ie.isbn === isbn && ie.userid === userid)
     issueQ.list.headOption match {
@@ -339,6 +341,18 @@ trait SlickDatabaseService extends DatabaseService with DatabaseServiceMessages 
   
   def returnList(userid: String) = DB(name) withSession { implicit session =>
     tables.returnHistory.filter(_.userid === userid).list
+  }
+  
+  def bookInfo(isbn: String) = DB(name) withSession { implicit session => 
+    tables.books.filter(_.isbn === isbn).list.headOption
+  }
+  
+  def studentUserInfo(userid: String) = DB(name) withSession { implicit session => 
+    tables.students.filter(_.userid === userid).list.headOption
+  }
+  
+  def adminUserInfo(userid: String) = DB(name) withSession { implicit session => 
+    tables.admins.filter(_.userid === userid).list.headOption
   }
   
   def insertUser(u: Seq[(User, String)]) {

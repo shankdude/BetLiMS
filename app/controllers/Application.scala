@@ -32,9 +32,15 @@ trait BetLiMSApplication extends Controller with DatabaseServiceProvider{
   
   def personal() = Action {
     val userid = "1201CS41"
-    val issues = databaseService.issueList(userid)
-    val requests = databaseService.issueRequestList(userid)
-    val history = databaseService.returnList(userid) take 5
+    val issues = databaseService.issueList(userid) map { ie =>
+      (ie.date.getTime, databaseService.bookInfo(ie.isbn).get)
+    }
+    val requests = databaseService.issueRequestList(userid) map { ie =>
+      (ie.date.getTime, databaseService.bookInfo(ie.isbn).get)
+    }
+    val history = databaseService.returnList(userid) take 5 map { re =>
+      (re.issueDate.getTime, databaseService.bookInfo(re.isbn).get, re.returnDate.getTime)
+    }
     Ok(views.html.personal(issues, requests, history)(None, Forms.loginForm))
   }
 
