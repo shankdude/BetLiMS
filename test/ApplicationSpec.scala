@@ -43,8 +43,8 @@ class ApplicationSpec extends BetLiMSSpec {
     }
 
     "render the search page for GET url /search" in withMockDatabase { (db, app) =>
-      db.booksearch(any[BookSearch]) returns List[Book]()
-      val result = app.search(BookSearch(None, None, None))(FakeRequest(GET, "/search"))
+      db.booksearch(any[BookSearch]) returns List[(Book, BookVariables)]()
+      val result = app.search(BookSearch(None, None, None, None, None, None))(FakeRequest(GET, "/search"))
 
       testStatus(result)
       testContentType(result)
@@ -53,12 +53,14 @@ class ApplicationSpec extends BetLiMSSpec {
     }
 
     "render the search page for GET url /search?title=Ashu" in withMockDatabase { (db, app) =>
-      db.booksearch(any[BookSearch]) returns List[Book] (
-        Book("12345", "Intro 1", "Ashu", 4),
-        Book("12356", "Intro 2", "Ashutosh", 1)
+      db.booksearch(any[BookSearch]) returns List[(Book, BookVariables)] (
+        Book("12345", "Intro 1", "Ashu", "XYZ Publisher", 1, 2008, 504, "537.6 GRI/I P08") ->
+          BookVariables("12345", 12, 3, 123),
+        Book("12356", "Intro 2", "Ashutosh", "1 Publishers", 2, 2009, 652, "535 THO/O P06") ->
+          BookVariables("12356", 15, 4, 154)
       )
 
-      val result = app.search(BookSearch(Some("Ashu"), None, None))(
+      val result = app.search(BookSearch(Some("Ashu"), None, None, None, None, None))(
          FakeRequest(GET, "/search?title=Ashu")
       )
 

@@ -1,4 +1,4 @@
-@(title: String)(content: Html)(implicit user: Option[User], loginForm: Form[UserLogin])
+@(title: String)(style: String)(content: Html)(implicit user: Option[User], loginForm: Form[UserLogin])
 
 <!DOCTYPE html>
 
@@ -24,6 +24,7 @@
 	      
 	      
     </head>
+    
 <body class="cbp-spmenu-push">
   <div class="left-close" id="comp">
 		<div id="slidingMenuDesc" class="slidingMenuDesc">
@@ -72,6 +73,34 @@
    </div>
      <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">
 	<!--code for login-->
+	
+    @user match {
+      case Some(b) => { 
+      
+			<div id="loginbox">
+			<div id="wrapper">
+
+				
+	
+				<div class="header">
+				<h1>Welcome  abcd</h1>
+				
+				</div>
+
+			  <div class="footer">
+			      <input type="submit" name="submit" value="Logout" class="button" />
+			     
+			  </div>
+	
+				</form>
+
+			   </div>
+			   </div>
+      
+      
+      
+      }
+       case None => {
 			<div id="loginbox">
 			<div id="wrapper">
 
@@ -98,6 +127,8 @@
 
 			   </div>
 			   </div>
+			   }
+}			   
 		  <!--code for login ends-->
 		</nav>
      <script src='@routes.Assets.at("javascripts/classie.js")' type="text/javascript"></script>
