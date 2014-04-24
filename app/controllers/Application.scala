@@ -29,6 +29,14 @@ trait BetLiMSApplication extends Controller with DatabaseServiceProvider{
       bs => Redirect(routes.BetLiMSApplication.search(bs))
     )
   }
+  
+  def personal() = Action {
+    val userid = "1201CS41"
+    val issues = databaseService.issueList(userid)
+    val requests = databaseService.issueRequestList(userid)
+    val history = databaseService.returnList(userid) take 5
+    Ok(views.html.personal(issues, requests, history)(None, Forms.loginForm))
+  }
 
 }
 

@@ -8,6 +8,7 @@ GET     /                               controllers.BetLiMSApplication.index
 #Search pages
 GET     /search                         controllers.BetLiMSApplication.search(bs: controllers.FormEncapsulators.BookSearch)
 GET     /search                         controllers.BetLiMSApplication.searchPost()
+GET     /personal                       controllers.BetLiMSApplication.personal()
 GET     /links/ejournals                controllers.BetLiMSApplication.links_ejournalPublishers()
 GET     /links/ejournals/:code          controllers.BetLiMSApplication.links_ejournals(code: String)
 POST    /links/ejournals/:code          controllers.BetLiMSApplication.links_ejournalPublishers_insert(code: String)

@@ -189,7 +189,7 @@ trait SlickDatabaseTables {
   }
 }
 
-trait SlickDatabaseService extends DatabaseService {
+trait SlickDatabaseService extends DatabaseService with DatabaseServiceMessages {
   tables: SlickDatabaseTables =>
 
   import Models._
@@ -257,21 +257,48 @@ trait SlickDatabaseService extends DatabaseService {
     }
   }
 
-  def issueRequest(b: Book, s: StudentUser) = {
-    Left("Unimplemented")
+  def issueRequest(isbn: String, userid: String) = DB(name) withSession { implicit session =>
+    val userIssued = tables.issueHistory.filter(_.userid === userid).list.length
+    if (userIssued < 3) {
+      val today = new SqlDate(System.currentTimeMillis)
+      val issued = tables.issueHistory.filter(_.isbn === isbn).list.length
+      val total = tables.bookVariables.filter(_.isbn === isbn).map(_.copies).list.head
+      val issueReq = tables.issueRequestHistory.filter(_.isbn === isbn).list.filter {
+        today.getTime - _.date.getTime < 500000
+      }
+      if (issued == total) {
+        Left(NO_MORE_COPIES)
+      } else if (issued + issueReq.length < total) {
+        tables.issueRequestHistory += IssueEntry(today, isbn, userid)
+        Right()
+      } else {
+        Left(REQUEST_PENDING)
+      }
+    } else {
+      Left(USER_LIMIT_REACHED)
+    }
   }
   def issueBook(isbn: String, userid: String) = DB(name) withSession { implicit session =>
-    val today = new SqlDate(System.currentTimeMillis)
-    val issued = tables.issueHistory.filter(_.isbn === isbn).list.length
-    val total = tables.bookVariables.filter(_.isbn === isbn).map(_.copies).list.head
-    val issueReqQ = tables.issueRequestHistory.filter(ie => ie.isbn === isbn && ie.userid === userid)
-    //Include issuerequest history in the condition
-    if (issued < total) {
+    val userIssued = tables.issueHistory.filter(_.userid === userid).list.length
+    if (userIssued < 3) {
       val today = new SqlDate(System.currentTimeMillis)
-      tables.issueHistory += IssueEntry(today, isbn, userid)
-      Right()
+      val issued = tables.issueHistory.filter(_.isbn === isbn).list.length
+      val total = tables.bookVariables.filter(_.isbn === isbn).map(_.copies).list.head
+      val issueReqUsrQ = tables.issueRequestHistory.filter(ie => ie.isbn === isbn && ie.userid === userid)
+      val issueReqAll = tables.issueRequestHistory.filter(ie => ie.isbn === isbn && ie.userid =!= userid).list.filter {
+        today.getTime - _.date.getTime < 500000
+      }
+      if (issued == total) {
+        Left(NO_MORE_COPIES)
+      } else if (issued + issueReqAll.length < total) {
+        issueReqUsrQ.delete
+        tables.issueHistory += IssueEntry(today, isbn, userid)
+        Right()
+      } else {
+        Left(REQUEST_PENDING)
+      }
     } else {
-      Left("No more copies left")
+       Left(USER_LIMIT_REACHED)
     }
   }
   def returnBook(isbn: String, userid: String) = DB(name) withSession { implicit session =>
@@ -282,7 +309,7 @@ trait SlickDatabaseService extends DatabaseService {
         issueQ.delete
         tables.returnHistory += ReturnEntry(issue.date, issue.isbn, issue.userid, today)
         Right()
-      case None => Left("No issue entry found")
+      case None => Left(NO_ISSUE_FOUND)
     }
   }
   
@@ -291,11 +318,27 @@ trait SlickDatabaseService extends DatabaseService {
   }
   
   def issueRequestList() = DB(name) withSession { implicit session =>
-    tables.issueRequestHistory.list
+    val today = new SqlDate(System.currentTimeMillis)
+    tables.issueRequestHistory.list.filter(today.getTime - _.date.getTime < 500000)
   }
   
   def returnList() = DB(name) withSession { implicit session =>
     tables.returnHistory.list
+  }
+  
+  def issueList(userid: String) = DB(name) withSession { implicit session =>
+    tables.issueHistory.filter(_.userid === userid).list
+  }
+  
+  def issueRequestList(userid: String) = DB(name) withSession { implicit session =>
+    val today = new SqlDate(System.currentTimeMillis)
+    tables.issueRequestHistory.filter(_.userid === userid).list.filter {
+      today.getTime - _.date.getTime < 500000
+    }
+  }
+  
+  def returnList(userid: String) = DB(name) withSession { implicit session =>
+    tables.returnHistory.filter(_.userid === userid).list
   }
   
   def insertUser(u: Seq[(User, String)]) {

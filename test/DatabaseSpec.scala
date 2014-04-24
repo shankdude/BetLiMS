@@ -3,10 +3,11 @@ package test
 import play.api.test._
 import play.api.test.Helpers._
 
+import controllers.DatabaseServiceMessages
 import controllers.FormEncapsulators._
 import controllers.Models._
 
-class DatabaseSpec extends BetLiMSSpec {
+class DatabaseSpec extends BetLiMSSpec with DatabaseServiceMessages {
   
   "SlickDatabaseService" should {
 
