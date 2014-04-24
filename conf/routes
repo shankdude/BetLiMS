@@ -24,6 +24,12 @@ DELETE  /links/ebooks/:code/:name       controllers.BetLiMSApplication.links_ebo
 GET     /links/edatabases               controllers.BetLiMSApplication.links_edatabases()
 POST    /links/edatabases/:name         controllers.BetLiMSApplication.links_edatabases_insert(name: String)
 DELETE  /links/edatabases/:name         controllers.BetLiMSApplication.links_edatabases_delete(name: String)
+GET     /info/students                  controllers.BetLiMSApplication.info_students_list()
+GET     /info/students/:userid          controllers.BetLiMSApplication.info_students(userid: String)
+GET     /info/admins                    controllers.BetLiMSApplication.info_admins_list()
+GET     /info/admins/:userid            controllers.BetLiMSApplication.info_admins(userid: String)
+GET     /info/books                     controllers.BetLiMSApplication.info_books_list()
+GET     /info/books/:isbn               controllers.BetLiMSApplication.info_books(isbn: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                   controllers.Assets.at(path="/public/", file)

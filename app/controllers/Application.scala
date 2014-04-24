@@ -202,4 +202,28 @@ trait BetLiMSRestfulServer extends Controller with DatabaseServiceProvider {
     )
   }
   
+  def info_students_list() = Action {
+    Ok(Json.toJson(databaseService.studentUsersList))
+  }
+  
+  def info_admins_list() = Action {
+    Ok(Json.toJson(databaseService.adminUsersList))
+  }
+  
+  def info_books_list() = Action { 
+    Ok(Json.toJson(databaseService.booksList))
+  }
+  
+  def info_students(userid: String) = Action {
+    Ok(Json.toJson(databaseService.studentUserInfo(userid)))
+  }
+  
+  def info_admins(userid: String) = Action {
+    Ok(Json.toJson(databaseService.adminUserInfo(userid)))
+  }
+  
+  def info_books(isbn: String) = Action {
+    Ok(Json.toJson(databaseService.bookInfo(isbn)))
+  }
+  
 }

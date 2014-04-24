@@ -46,6 +46,41 @@ object JsonWrappers {
     )
   }
   
+  implicit val bookWrites = new Writes[(Book, BookVariables)] {
+    def writes(details: (Book, BookVariables)) = {
+      val (b, bv) = details
+      Json.obj(
+        "isbn" -> b.isbn,
+        "title" -> b.title,
+        "author" -> b.author,
+        "publisher" -> b.publisher,
+        "edition" -> b.edition,
+        "publishYear" -> b.publishYear,
+        "pages" -> b.pages,
+        "callNo" -> b.callNo,
+        "copies" -> bv.copies,
+        "references" -> bv.references,
+        "checkouts" -> bv.checkouts
+      )
+    }
+  }
+  
+  implicit val studentUserWrite = new Writes[StudentUser] {
+    def writes(s: StudentUser) = Json.obj(
+      "userid" -> s.userid,
+      "name" -> s.name,
+      "year" -> s.year,
+      "branch" -> s.branch
+    )
+  }
+  
+  implicit val adminUserWrite = new Writes[AdminUser] {
+    def writes(a: AdminUser) = Json.obj(
+      "userid" -> a.userid,
+      "name" -> a.name
+    )
+  }
+  
   val ejournalPublisherReads: String => Reads[EJournalPublisher] = code => (
     (JsPath \ "name").read[String] and
     (JsPath \ "url").read[String] and

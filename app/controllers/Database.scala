@@ -55,7 +55,10 @@ trait DatabaseService {
   def issueRequestList(userid: String): List[IssueEntry]
   def returnList(userid: String): List[ReturnEntry]
   
-  def bookInfo(isbn: String): Option[Book]
+  def booksList(): List[(Book, BookVariables)]
+  def studentUsersList(): List[StudentUser]
+  def adminUsersList(): List[AdminUser]
+  def bookInfo(isbn: String): Option[(Book, BookVariables)]
   def studentUserInfo(userid: String): Option[StudentUser]
   def adminUserInfo(userid: String): Option[AdminUser]
   

@@ -22,6 +22,8 @@ trait SlickDatabaseTables {
     def edition = column[Int]("edition")
     def publishYear = column[Int]("publish_year")
     def pages = column[Int]("pages")
+    
+    def variables = foreignKey(bookVariablesTableName, isbn, bookVariables)(_.isbn)
 
     def * = (isbn, title, author, publisher, edition, publishYear, pages,
       callNo) <> (Book.tupled, Book.unapply)
@@ -343,8 +345,28 @@ trait SlickDatabaseService extends DatabaseService with DatabaseServiceMessages 
     tables.returnHistory.filter(_.userid === userid).list
   }
   
+  def booksList() = DB(name) withSession { implicit session => 
+    val q = for {
+      b <- tables.books
+      bv <- b.variables
+    } yield (b, bv)
+    q.list
+  }
+  
+  def studentUsersList() = DB(name) withSession { implicit session => 
+    tables.students.list
+  }
+  
+  def adminUsersList() = DB(name) withSession { implicit session => 
+    tables.admins.list
+  }
+  
   def bookInfo(isbn: String) = DB(name) withSession { implicit session => 
-    tables.books.filter(_.isbn === isbn).list.headOption
+    val q = for {
+      b <- tables.books if (b.isbn === isbn)
+      bv <- b.variables
+    } yield (b, bv)
+    q.list.headOption
   }
   
   def studentUserInfo(userid: String) = DB(name) withSession { implicit session => 
