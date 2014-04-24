@@ -87,7 +87,7 @@ trait SlickDatabaseTables {
   
   val issueRequestHistoryTableName = "issue_request_history"
   val issueRequestHistory = TableQuery[IssueRequestHistoryTable]
-  class IssueRequestHistoryTable(tag: Tag) extends Table[IssueEntry](tag, issueHistoryTableName) {
+  class IssueRequestHistoryTable(tag: Tag) extends Table[IssueEntry](tag, issueRequestHistoryTableName) {
     def isbn = column[String]("isbn")
     def userid = column[String]("user_id")
     def date = column[SqlDate]("date")

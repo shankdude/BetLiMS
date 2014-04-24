@@ -1,0 +1,108 @@
+@(issue:List[(Long, (Book, BookVariables))],requested:List[(Long, (Book, BookVariables))],history: List[(Long, (Book, BookVariables),Long)])(implicit user: Option[User], loginForm: Form[UserLogin])
+@main("personal")("personal"){
+  
+     
+  
+  
+   <script>
+   function date(ms) {
+	    var date = new Date(ms);  
+	   return date.toString("MMM dd").substring(0,13);
+	   
+	    }
+   </script>
+ 
+    <div class="left">
+    <p id="head">Issued Books</p>
+    <br>
+          @for(ie <- issue) {
+	      @ie match { 
+	     case (time, (b, bv)) => {
+	     <div id="int">
+	     <div class="title">Title: @b.title </div>
+             <div class="author">Author: @b.author </div>
+             <div class="copies">Publishers: @b.publisher </div>
+             <br>
+            <div class="date">Date of issue: <p id="d@time"></p> </div> 
+	    </div>
+	       <script>
+     
+	  
+	     document.getElementById("d@time").innerHTML = date(@time);
+	  
+	 
+	 
+	  </script>
+	  }
+	       }
+	       <br>
+	      
+  
+  }
+     </div>
+
+       <div class="left">
+    <p id="head">Books requested for Issue</p>
+    <br>
+         @for(r <- requested) {
+	      @r match { 
+	     case (time, (b, bv)) => {
+	      <div id="int">
+	     <div class="title">Title: @b.title </div>
+             <div class="author">Author: @b.author </div>
+             <div class="copies">Publishers: @b.publisher </div>
+             <br>
+            <div class="date">Date of issue: <p id="b@time"></p> </div>
+  </div>
+  <script>
+     
+	  
+	     document.getElementById("b@time").innerHTML = date(@time);
+	  
+	 
+	 
+	  </script>
+  }
+	       }
+	       <br>
+	      
+  
+  }
+     </div>
+
+      <div class="left">
+    <p id="head">Book Issue History</p>
+       <br> 
+       @for(h <- history) {
+	      @h match { 
+	     case (time, (b, bv),time2) => {
+	      <div id="int">
+	     <div class="title">Title: @b.title </div>
+             <div class="author">Author: @b.author </div>
+             <div class="copies">Publishers: @b.publisher </div>
+             <br>
+            <div class="date">Date of issue:  <p id="c@time"></p> </div>
+              <div class="rdate">Date of Return: <p id="e@time"></p> </div>
+  </div>
+  <script>
+     
+	  
+	     document.getElementById("c@time").innerHTML = date(@time);
+	      document.getElementById("e@time").innerHTML = date(@time2);
+	  </script>
+  }
+	       }
+		<br>
+  
+  }
+     </div>
+
+     
+     
+  
+     
+  
+	
+	
+
+}

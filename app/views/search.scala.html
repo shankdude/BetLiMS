@@ -28,11 +28,11 @@
 	<div class="container"> 
   <div class="clear"></div> 
    
-        @for(book <- b) {
+        @for((book,bv) <- b) {
         <div class="left">
 	     <div class="title">Title: @book.title </div>
              <div class="author">Author: @book.author </div>
-             <div class="copies">No. of Copies: @book.copies </div>
+             <div class="copies">No. of Copies: @bv.copies </div>
              Publisher: 
              <div class="right"><input type="checkbox" /></div>
 
