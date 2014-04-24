@@ -1,7 +1,7 @@
 
 @(form : Form[BookSearch])(books: Option[List[(Book, BookVariables)]])
 
-@main("Search") {
+@main("Search")("search") {
    
   <div id="new_item_header">
   <h1>Please Enter the Search query</h1>
@@ -10,9 +10,9 @@
   <div id="form-text">
   <br>
   @helper.form(action = routes.BetLiMSApplication.searchPost(),'id -> "txt") {
-    @helper.inputText(form("title"), 'id -> "lbl")<br>
-    @helper.inputText(form("isbn"), 'id -> "lbl")<br>
-    @helper.inputText(form("author"), 'id -> "lbl")<br>
+    @helper.inputText(form("title"))<br>
+    @helper.inputText(form("isbn"))<br>
+    @helper.inputText(form("author"))<br>
     <br>
     <button id="btn" type="submit">Search</button>
   }
@@ -21,32 +21,31 @@
   
     @books match {
       case Some(b) => { 
-      
-        @for((book, bookVariables) <- b) {
-        <div id="tbl">
-    <table border="4px" align="center" topmargin="10px">
-    <thead>
-    <tr>
-      <th colspan="3">Search Results</th>
-    </tr>
-    <tr>
-      <td>Title</td>
-      <td>Author</td>
-      <td>Number of available copies</td>      
-     </tr> 
-    </thead>
-    
-    <tbody>
-          <tr>
-            <td> @book.title </td>
-            <td> @book.author </td>
-            <td> @bookVariables.copies </td>
-          </tr> 
-      </tbody>
-  </table>
+
+      @if(b.isEmpty){
+	  <p id="empty">No Search Results Found</p>
+      } else{
+	<div class="container"> 
+  <div class="clear"></div> 
+   
+        @for(book <- b) {
+        <div class="left">
+	     <div class="title">Title: @book.title </div>
+             <div class="author">Author: @book.author </div>
+             <div class="copies">No. of Copies: @book.copies </div>
+             Publisher: 
+             <div class="right"><input type="checkbox" /></div>
+
   </div>
+  
+  }
+  <div class="clear"></div>   
+</div>
+  <div class="issue">{
+    <button type="submit">Issue Books</button></div>
+    }
         }
-     
+  
       }
       case None => {}
      }
